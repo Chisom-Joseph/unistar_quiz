@@ -68,7 +68,7 @@ try {
         <div class="col-md-4">
             <div class="card shadow-sm mb-4">
                 <div class="card-body text-center">
-                    <img src="<?php echo SITE_URL . "/public/" . htmlspecialchars($userData['profile_pic']); ?>" alt="Profile Picture" class="rounded-circle mb-3" width="150" height="150">
+                    <img src="<?php echo SITE_URL . "/public/uploads/" . htmlspecialchars($userData['profile_pic']); ?>" alt="Profile Picture" class="rounded-circle mb-3" style="object-fit: cover;" width="150" height="150">
                     <h5 class="card-title"><?php echo htmlspecialchars($userData['full_name']); ?></h5>
                     <p class="card-text"><?php echo htmlspecialchars($userData['username']); ?></p>
                     <p class="card-text"><?php echo htmlspecialchars($userData['email']); ?></p>
