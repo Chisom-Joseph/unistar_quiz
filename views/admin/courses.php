@@ -27,8 +27,7 @@ try {
         }
     }
     // Fetch courses
-    $stmt = $admin->pdo->query("SELECT * FROM courses ORDER BY id DESC");
-    $courses = $stmt->fetchAll();
+    $courses = $admin->getAllCourses();
 } catch (Exception $e) {
     error_log("Error in admin courses: " . $e->getMessage());
     $error = $e->getMessage();
