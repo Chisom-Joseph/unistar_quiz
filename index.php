@@ -1,161 +1,105 @@
 <?php
 // index.php
+session_start();
 require_once 'config/constants.php';
 require_once 'includes/auth.php';
 require_once 'classes/User.php';
-require_once 'classes/Quiz.php';
 require_once 'classes/Admin.php';
+require_once 'classes/Quiz.php';
 require_once 'classes/Payment.php';
-require_once 'classes/Flags.php';
-
-$page = $_GET['page'] ?? 'home';
-error_log("Requested page: $page, session_id=" . session_id() . ", user_id=" . ($_SESSION['user_id'] ?? 'none'));
 
 $user = new User();
-$quiz = new Quiz();
 $admin = new Admin();
+$quiz = new Quiz();
 $payment = new Payment();
 
-// Redirect logged-in users from auth pages
-if (isset($_SESSION['user_id']) && in_array($page, ['login', 'register', 'verify', 'forgot', 'reset'])) {
-    try {
-        $userData = $user->getUserData($_SESSION['user_id']);
-        $dashboardPage = $userData['role'] === 'admin' ? 'admin_dashboard' : 'dashboard';
-        error_log("Redirecting logged-in user_id: {$_SESSION['user_id']} from $page to $dashboardPage");
-        header('Location: ' . SITE_URL . '/?page=' . $dashboardPage);
-        exit;
-    } catch (Exception $e) {
-        error_log("Invalid user_id: {$_SESSION['user_id']} on $page, clearing session: " . $e->getMessage());
-        session_unset();
-        session_destroy();
-        session_start();
-        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-    }
+$page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
+
+if (!isset($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
-switch ($page) {
-    case 'register':
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            error_log("Register submission: session_id=" . session_id() . ", submitted_csrf=" . ($_POST['csrf'] ?? 'none') . ", post_data=" . json_encode($_POST));
-            try {
-                validateCsrf($_POST['csrf'] ?? '');
-                $userId = $user->register($_POST);
-                header('Location: ' . SITE_URL . '/?page=verify&user=' . $userId);
-                exit;
-            } catch (Exception $e) {
-                $error = $e->getMessage();
-            }
-        }
-        include 'views/auth/register.php';
-        break;
-    case 'login':
-        error_log("Loading login page");
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            error_log("Login submission: session_id=" . session_id() . ", submitted_csrf=" . ($_POST['csrf'] ?? 'none') . ", post_data=" . json_encode($_POST));
-            try {
-                validateCsrf($_POST['csrf'] ?? '');
-                if (!isset($_POST['email']) || !isset($_POST['password'])) {
-                    throw new Exception('Email and password are required');
-                }
-                $userId = $user->login($_POST['email'], $_POST['password']);
-                $userData = $user->getUserData($userId);
-                $dashboardPage = $userData['role'] === 'admin' ? 'admin_dashboard' : 'dashboard';
-                header('Location: ' . SITE_URL . '/?page=' . $dashboardPage);
-                exit;
-            } catch (Exception $e) {
-                $error = $e->getMessage();
-            }
-        }
-        include 'views/auth/login.php';
-        break;
-    case 'logout':
-        error_log("Logout initiated for user_id: " . ($_SESSION['user_id'] ?? 'none') . ", session_id=" . session_id());
-        session_unset();
-        session_destroy();
-        session_start();
-        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-        error_log("New CSRF token generated after logout: " . $_SESSION['csrf_token'] . ", session_id=" . session_id());
-        header('Location: ' . SITE_URL . '/?page=login&message=logged_out');
+try {
+    if (!$user->isLoggedIn() && !in_array($page, ['login', 'register', 'verify', 'forgot_password', 'reset_password'])) {
+        header('Location: ' . SITE_URL . '/?page=login&error=not_logged_in');
         exit;
-        break;
-    case 'dashboard':
-        error_log("Loading user dashboard page");
-        if (!isset($_SESSION['user_id'])) {
-            error_log("Unauthorized access to dashboard, redirecting to login");
-            header('Location: ' . SITE_URL . '/?page=login&error=not_logged_in');
+    }
+
+    switch ($page) {
+        case 'login':
+            include 'views/auth/login.php';
+            break;
+        case 'register':
+            include 'views/auth/register.php';
+            break;
+        case 'verify':
+            include 'views/auth/verify.php';
+            break;
+        case 'forgot_password':
+            include 'views/auth/forgot_password.php';
+            break;
+        case 'reset_password':
+            include 'views/auth/reset_password.php';
+            break;
+        case 'dashboard':
+            include 'views/user/dashboard.php';
+            break;
+        case 'profile':
+            include 'views/user/profile.php';
+            break;
+        case 'quiz':
+            include 'views/user/quiz.php';
+            break;
+        case 'admin_dashboard':
+            if (!Admin::isAdmin($_SESSION['user_id'])) {
+                error_log("Unauthorized access to admin dashboard, user_id: {$_SESSION['user_id']}");
+                header('Location: ' . SITE_URL . '/?page=login&error=not_authorized');
+                exit;
+            }
+            include 'views/admin/dashboard.php';
+            break;
+        case 'admin_users':
+            if (!Admin::isAdmin($_SESSION['user_id'])) {
+                error_log("Unauthorized access to admin users, user_id: {$_SESSION['user_id']}");
+                header('Location: ' . SITE_URL . '/?page=login&error=not_authorized');
+                exit;
+            }
+            include 'views/admin/users.php';
+            break;
+        case 'admin_quizzes':
+            if (!Admin::isAdmin($_SESSION['user_id'])) {
+                error_log("Unauthorized access to admin quizzes, user_id: {$_SESSION['user_id']}");
+                header('Location: ' . SITE_URL . '/?page=login&error=not_authorized');
+                exit;
+            }
+            include 'views/admin/quizzes.php';
+            break;
+        case 'admin_courses':
+            if (!Admin::isAdmin($_SESSION['user_id'])) {
+                error_log("Unauthorized access to admin courses, user_id: {$_SESSION['user_id']}");
+                header('Location: ' . SITE_URL . '/?page=login&error=not_authorized');
+                exit;
+            }
+            include 'views/admin/courses.php';
+            break;
+        case 'admin_questions':
+            if (!Admin::isAdmin($_SESSION['user_id'])) {
+                error_log("Unauthorized access to admin questions, user_id: {$_SESSION['user_id']}");
+                header('Location: ' . SITE_URL . '/?page=login&error=not_authorized');
+                exit;
+            }
+            include 'views/admin/questions.php';
+            break;
+        case 'logout':
+            $user->logout();
+            header('Location: ' . SITE_URL . '/?page=login');
             exit;
-        }
-        $userData = $user->getUserData($_SESSION['user_id']);
-        if ($userData['role'] === 'admin') {
-            error_log("Admin user_id: {$_SESSION['user_id']} redirected to admin_dashboard");
-            header('Location: ' . SITE_URL . '/?page=admin_dashboard');
-            exit;
-        }
-        include 'views/user/dashboard.php';
-        break;
-    case 'admin_dashboard':
-        error_log("Loading admin dashboard page");
-        if (!isset($_SESSION['user_id'])) {
-            error_log("Unauthorized access to admin dashboard, redirecting to login");
-            header('Location: ' . SITE_URL . '/?page=login&error=not_logged_in');
-            exit;
-        }
-        $userData = $user->getUserData($_SESSION['user_id']);
-        if ($userData['role'] !== 'admin') {
-            error_log("Non-admin user_id: {$_SESSION['user_id']} attempted to access admin dashboard");
+        default:
             header('Location: ' . SITE_URL . '/?page=dashboard');
             exit;
-        }
-        include 'views/admin/dashboard.php';
-        break;
-    case 'admin_users':
-        error_log("Loading admin users page");
-        if (!isset($_SESSION['user_id'])) {
-            error_log("Unauthorized access to admin users, redirecting to login");
-            header('Location: ' . SITE_URL . '/?page=login&error=not_logged_in');
-            exit;
-        }
-        $userData = $user->getUserData($_SESSION['user_id']);
-        if ($userData['role'] !== 'admin') {
-            error_log("Non-admin user_id: {$_SESSION['user_id']} attempted to access admin users");
-            header('Location: ' . SITE_URL . '/?page=dashboard');
-            exit;
-        }
-        include 'views/admin/users.php';
-        break;
-    case 'admin_quizzes':
-        error_log("Loading admin quizzes page");
-        if (!isset($_SESSION['user_id'])) {
-            error_log("Unauthorized access to admin quizzes, redirecting to login");
-            header('Location: ' . SITE_URL . '/?page=login&error=not_logged_in');
-            exit;
-        }
-        $userData = $user->getUserData($_SESSION['user_id']);
-        if ($userData['role'] !== 'admin') {
-            error_log("Non-admin user_id: {$_SESSION['user_id']} attempted to access admin quizzes");
-            header('Location: ' . SITE_URL . '/?page=dashboard');
-            exit;
-        }
-        include 'views/admin/quizzes.php';
-        break;
-    case 'admin_courses':
-        error_log("Loading admin courses page");
-        if (!isset($_SESSION['user_id'])) {
-            error_log("Unauthorized access to admin courses, redirecting to login");
-            header('Location: ' . SITE_URL . '/?page=login&error=not_logged_in');
-            exit;
-        }
-        $userData = $user->getUserData($_SESSION['user_id']);
-        if ($userData['role'] !== 'admin') {
-            error_log("Non-admin user_id: {$_SESSION['user_id']} attempted to access admin courses");
-            header('Location: ' . SITE_URL . '/?page=dashboard');
-            exit;
-        }
-        include 'views/admin/courses.php';
-        break;
-    default:
-        error_log("Default case triggered for page: $page");
-        include 'views/home.php';
-        break;
+    }
+} catch (Exception $e) {
+    error_log("Error in index.php: " . $e->getMessage());
+    include 'views/errors/500.php';
 }
 ?>
