@@ -7,8 +7,12 @@ class Quiz {
     private $flags;
 
     public function __construct() {
-        $this->pdo = Database::getInstance();
-        $this->flags = new FeatureFlag();
+        try {
+            $this->pdo = Database::getInstance();
+        } catch (Exception $e) {
+            error_log("Database connection failed: " . $e->getMessage());
+            throw new Exception("Database connection failed");
+        }
     }
 
     // Get available quizzes for user (with attempts left)
