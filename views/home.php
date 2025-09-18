@@ -202,47 +202,6 @@
                                  <ul>
                                     <li><a href="/">Home</a></li>
                                     <li><a href="about-us.html">about us</a></li>
-                                    <li class="has-dropdown">
-                                       <a href="services-1.html">services</a>
-                                       <ul class="it-submenu submenu">
-                                          <li><a href="services-1.html">services 01</a></li>
-                                          <li><a href="services-2.html">services 02</a></li>
-                                          <li><a href="services-3.html">services 03</a></li>
-                                          <li><a href="service-details.html">services details</a></li>
-                                       </ul>
-                                    </li>
-                                    <li class="has-dropdown">
-                                       <a href="#">pages</a>
-                                       <ul class="it-submenu submenu has-megamenu">
-                                          <li><a href="course-1.html">Course 01</a></li>
-                                          <li><a href="course-2.html">Course 02</a></li>
-                                          <li><a href="course-details.html">Course Details</a></li>
-                                          <li><a href="teacher.html">Teacher</a></li>
-                                          <li><a href="teacher-details.html">Teacher Details</a></li>
-                                          <li><a href="price.html">Price</a></li>
-                                          <li><a href="event.html">Event</a></li>
-                                          <li><a href="event-details.html">Event Details</a></li>
-                                          <li><a href="cart.html">Cart</a></li>
-                                          <li><a href="checkout.html">Checkout</a></li>
-                                          <li><a href="testimonial.html">Testimonial</a></li>
-                                          <li><a href="Instructor-registration.html">Instructor Registration</a></li>
-                                          <li><a href="student-registration-1.html">Student Registration 01</a></li>
-                                          <li><a href="student-registration-2.html">Student Registration 02</a></li>
-                                          <li><a href="faq.html">Faq</a></li>
-                                          <li><a href="signin.html">Sign IN</a></li>
-                                          <li><a href="signup.html">Sign UP</a></li>
-                                          <li><a href="404.html">Error</a></li>
-                                       </ul>
-                                    </li>
-                                    <li class="has-dropdown">
-                                       <a href="blog-1.html">blog</a>
-                                       <ul class="it-submenu submenu">
-                                          <li><a href="blog-1.html">Blog 01</a></li>
-                                          <li><a href="blog-2.html">BLog 02</a></li>
-                                          <li><a href="blog-sidebar.html">Blog Sidebar</a></li>
-                                          <li><a href="blog-details.html">Blog details</a></li>
-                                       </ul>
-                                    </li>
                                     <li><a href="contact.html">contact</a></li>
                                  </ul>
                               </nav>
@@ -250,11 +209,6 @@
                         </div>
                         <div class="col-xl-3 col-5">
                            <div class="it-header-2-right d-flex align-items-center justify-content-end">
-                              <div class="it-header-2-icon">
-                                 <a href="cart.html">
-                                    <i class="fa-regular fa-cart-shopping"></i>
-                                 </a>
-                              </div>
                               <div class="it-header-2-button d-none d-md-block">
                                  <a class="it-btn-white" href="contact.html">
                                     <span>
