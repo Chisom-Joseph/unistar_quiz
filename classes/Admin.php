@@ -9,8 +9,23 @@ class Admin {
     public $flags;
 
     public function __construct() {
-        $this->pdo = Database::getInstance();
-        $this->flags = new Flags();
+        try {
+            $this->pdo = Database::getInstance();
+            $this->flags = new Flags();
+        } catch (\Throwable $th) {
+            error_log("Database connection failed: " . $e->getMessage());
+            throw new Exception("Database connection failed");
+        }
+    }
+
+    public function getTotalQuizzes() {
+        $stmt = $this->pdo->query("SELECT COUNT(*) FROM quizzes");
+        return $stmt->fetchColumn();
+    }
+
+    public function getTotalCourses() {
+        $stmt = $this->pdo->query("SELECT COUNT(*) FROM courses");
+        return $stmt->fetchColumn();
     }
 
     public static function isAdmin($userId) {

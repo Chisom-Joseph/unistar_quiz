@@ -108,6 +108,51 @@ switch ($page) {
         }
         include 'views/admin/dashboard.php';
         break;
+    case 'admin_users':
+        error_log("Loading admin users page");
+        if (!isset($_SESSION['user_id'])) {
+            error_log("Unauthorized access to admin users, redirecting to login");
+            header('Location: ' . SITE_URL . '/?page=login&error=not_logged_in');
+            exit;
+        }
+        $userData = $user->getUserData($_SESSION['user_id']);
+        if ($userData['role'] !== 'admin') {
+            error_log("Non-admin user_id: {$_SESSION['user_id']} attempted to access admin users");
+            header('Location: ' . SITE_URL . '/?page=dashboard');
+            exit;
+        }
+        include 'views/admin/users.php';
+        break;
+    case 'admin_quizzes':
+        error_log("Loading admin quizzes page");
+        if (!isset($_SESSION['user_id'])) {
+            error_log("Unauthorized access to admin quizzes, redirecting to login");
+            header('Location: ' . SITE_URL . '/?page=login&error=not_logged_in');
+            exit;
+        }
+        $userData = $user->getUserData($_SESSION['user_id']);
+        if ($userData['role'] !== 'admin') {
+            error_log("Non-admin user_id: {$_SESSION['user_id']} attempted to access admin quizzes");
+            header('Location: ' . SITE_URL . '/?page=dashboard');
+            exit;
+        }
+        include 'views/admin/quizzes.php';
+        break;
+    case 'admin_courses':
+        error_log("Loading admin courses page");
+        if (!isset($_SESSION['user_id'])) {
+            error_log("Unauthorized access to admin courses, redirecting to login");
+            header('Location: ' . SITE_URL . '/?page=login&error=not_logged_in');
+            exit;
+        }
+        $userData = $user->getUserData($_SESSION['user_id']);
+        if ($userData['role'] !== 'admin') {
+            error_log("Non-admin user_id: {$_SESSION['user_id']} attempted to access admin courses");
+            header('Location: ' . SITE_URL . '/?page=dashboard');
+            exit;
+        }
+        include 'views/admin/courses.php';
+        break;
     default:
         error_log("Default case triggered for page: $page");
         include 'views/home.php';
