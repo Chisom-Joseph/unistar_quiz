@@ -1,0 +1,14 @@
+/* css/style.css */
+body {
+  font-family: Arial;
+  color: #333;
+  background: #fff;
+}
+.container {
+  max-width: 1200px;
+  margin: auto;
+}
+@media (max-width: 768px) {
+  /* Mobile */
+}
+/* Grid for dashboard, high-contrast, ARIA labels in HTML */
