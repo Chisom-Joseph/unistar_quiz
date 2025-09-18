@@ -1,4 +1,5 @@
 <?php
+// views/admin/dashboard.php
 ob_start();
 require_once 'config/constants.php';
 require_once 'includes/auth.php';
@@ -6,14 +7,7 @@ require_once 'classes/User.php';
 require_once 'classes/Admin.php';
 
 $user = new User();
-$admin = new Admin();feat(admin): enhance dashboard with metrics and Bootstrap UI
-
-- Integrated User and Admin classes for data fetching
-- Added role validation and improved error handling
-- Displayed key metrics: total users, quizzes, courses, and active users
-- Replaced plain HTML with Bootstrap cards and responsive layout
-- Added offcanvas menu trigger for mobile navigation
-
+$admin = new Admin();
 
 try {
     $userData = $user->getUserData($_SESSION['user_id']);
