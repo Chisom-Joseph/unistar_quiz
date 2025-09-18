@@ -13,7 +13,7 @@ class Admin {
             $this->pdo = Database::getInstance();
             $this->flags = new Flags();
         } catch (\Throwable $th) {
-            error_log("Database connection failed: " . $e->getMessage());
+            error_log("Database connection failed: " . $th->getMessage());
             throw new Exception("Database connection failed");
         }
     }
@@ -82,6 +82,113 @@ class Admin {
             fputcsv($out, [$user['username'], $user['email'], $user['full_name'], $user['created_at']]);
         }
         fclose($out);
+    }
+
+    public function getAllCourses() {
+        $stmt = $this->pdo->prepare("SELECT * FROM courses ORDER BY id DESC");
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
+    public function getAllQuizzes() {
+        $stmt = $this->pdo->prepare("
+            SELECT q.id, q.name, q.course_id, q.attempts_allowed, q.timer_minutes, 
+                   c.name AS course_name, COUNT(a.id) AS attempts
+            FROM quizzes q
+            LEFT JOIN courses c ON q.course_id = c.id
+            LEFT JOIN attempts a ON q.id = a.quiz_id
+            GROUP BY q.id, q.name, q.course_id, q.attempts_allowed, q.timer_minutes, c.name
+            ORDER BY q.id DESC
+        ");
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
+    public function createQuiz($course_id, $name, $attempts_allowed, $timer_minutes) {
+        $stmt = $this->pdo->prepare("
+            INSERT INTO quizzes (course_id, name, attempts_allowed, timer_minutes)
+            VALUES (?, ?, ?, ?)
+        ");
+        $stmt->execute([(int)$course_id, $name, (int)$attempts_allowed, (int)$timer_minutes]);
+    }
+
+    public function updateQuiz($quiz_id, $course_id, $name, $attempts_allowed, $timer_minutes) {
+        $stmt = $this->pdo->prepare("
+            UPDATE quizzes 
+            SET course_id = ?, name = ?, attempts_allowed = ?, timer_minutes = ?
+            WHERE id = ?
+        ");
+        $stmt->execute([(int)$course_id, $name, (int)$attempts_allowed, (int)$timer_minutes, (int)$quiz_id]);
+    }
+
+    public function deleteQuiz($quiz_id) {
+        $stmt = $this->pdo->prepare("DELETE FROM attempts WHERE quiz_id = ?");
+        $stmt->execute([(int)$quiz_id]);
+        $stmt = $this->pdo->prepare("DELETE FROM questions WHERE quiz_id = ?");
+        $stmt->execute([(int)$quiz_id]);
+        $stmt = $this->pdo->prepare("DELETE FROM quizzes WHERE id = ?");
+        $stmt->execute([(int)$quiz_id]);
+    }
+
+    public function getQuestionsByQuiz($quiz_id) {
+        $stmt = $this->pdo->prepare("
+            SELECT id, text, options, correct_option_index, score, explanation
+            FROM questions
+            WHERE quiz_id = ?
+            ORDER BY id
+        ");
+        $stmt->execute([(int)$quiz_id]);
+        $questions = $stmt->fetchAll();
+        foreach ($questions as &$question) {
+            $question['options'] = json_decode($question['options'], true);
+        }
+        return $questions;
+    }
+
+    public function getAllQuestions() {
+        $stmt = $this->pdo->prepare("
+            SELECT q.id, q.quiz_id, q.text, q.options, q.correct_option_index, q.score, q.explanation, 
+                   z.name AS quiz_name
+            FROM questions q
+            LEFT JOIN quizzes z ON q.quiz_id = z.id
+            ORDER BY q.id DESC
+        ");
+        $stmt->execute();
+        $questions = $stmt->fetchAll();
+        foreach ($questions as &$question) {
+            $question['options'] = json_decode($question['options'], true);
+        }
+        return $questions;
+    }
+
+    public function createQuestion($quiz_id, $text, $correct_option_index, $options, $score, $explanation) {
+        if (!is_array($options) || count(array_filter($options, 'strlen')) < 2 || !in_array($correct_option_index, [0, 1, 2, 3])) {
+            throw new Exception("Invalid question data: At least 2 non-empty options required, and correct_option_index must be 0–3");
+        }
+        $options = array_slice($options, 0, 4); // Ensure max 4 options
+        $stmt = $this->pdo->prepare("
+            INSERT INTO questions (quiz_id, text, options, correct_option_index, score, explanation)
+            VALUES (?, ?, ?, ?, ?, ?)
+        ");
+        $stmt->execute([(int)$quiz_id, $text, json_encode($options), (int)$correct_option_index, (int)$score, $explanation]);
+    }
+
+    public function updateQuestion($question_id, $text, $correct_option_index, $options, $score, $explanation) {
+        if (!is_array($options) || count(array_filter($options, 'strlen')) < 2 || !in_array($correct_option_index, [0, 1, 2, 3])) {
+            throw new Exception("Invalid question data: At least 2 non-empty options required, and correct_option_index must be 0–3");
+        }
+        $options = array_slice($options, 0, 4); // Ensure max 4 options
+        $stmt = $this->pdo->prepare("
+            UPDATE questions 
+            SET text = ?, options = ?, correct_option_index = ?, score = ?, explanation = ?
+            WHERE id = ?
+        ");
+        $stmt->execute([$text, json_encode($options), (int)$correct_option_index, (int)$score, $explanation, (int)$question_id]);
+    }
+
+    public function deleteQuestion($question_id) {
+        $stmt = $this->pdo->prepare("DELETE FROM questions WHERE id = ?");
+        $stmt->execute([(int)$question_id]);
     }
 }
 ?>
