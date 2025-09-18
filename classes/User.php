@@ -11,6 +11,10 @@ class User {
         $this->pdo = Database::getInstance();
     }
 
+    public function isLoggedIn() {
+        return isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
+    }
+
     public function register($data) {
         // Validate input
         if (!isset($data['username']) || !isset($data['email']) || !isset($data['password']) || !isset($data['full_name'])) {
@@ -19,8 +23,8 @@ class User {
         if (!isset($data['confirm_password']) || $data['password'] !== $data['confirm_password']) {
             throw new Exception('Passwords do not match');
         }
-        if (!preg_match(PASSWORD_PATTERN, $data['password'])) {
-            throw new Exception('Password does not meet requirements');
+        if (!preg_match(defined('PASSWORD_PATTERN') ? PASSWORD_PATTERN : '/^.{8,}$/', $data['password'])) {
+            throw new Exception('Password must be at least 8 characters and meet complexity requirements');
         }
         if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
             throw new Exception('Invalid email format');
@@ -36,19 +40,42 @@ class User {
         // Handle profile picture
         $profilePic = 'default.jpg';
         if (isset($_FILES['profile_pic']) && $_FILES['profile_pic']['error'] === UPLOAD_ERR_OK) {
+            error_log("Processing profile picture upload: " . print_r($_FILES['profile_pic'], true));
             if ($_FILES['profile_pic']['size'] > MAX_PIC_SIZE) {
+                error_log("Profile picture size exceeds limit: {$_FILES['profile_pic']['size']} bytes");
                 throw new Exception('Profile picture exceeds size limit');
             }
             if (!in_array($_FILES['profile_pic']['type'], ALLOWED_PIC_TYPES)) {
+                error_log("Invalid profile picture type: {$_FILES['profile_pic']['type']}");
                 throw new Exception('Invalid profile picture format');
             }
             $ext = pathinfo($_FILES['profile_pic']['name'], PATHINFO_EXTENSION);
-            $filename = uniqid() . '.' . $ext;
-            $uploadPath = 'public/images/' . $filename;
+            $filename = 'user_' . uniqid() . '.' . $ext;
+            $uploadDir = realpath(__DIR__ . '/../public/uploads') . '/';
+            $uploadPath = $uploadDir . $filename;
+            if (!is_dir($uploadDir)) {
+                if (!mkdir($uploadDir, 0755, true)) {
+                    error_log("Failed to create directory: $uploadDir");
+                    throw new Exception('Failed to create upload directory');
+                }
+            }
+            if (!is_writable($uploadDir)) {
+                error_log("Directory not writable: $uploadDir");
+                throw new Exception('Upload directory is not writable');
+            }
+            if (!file_exists($_FILES['profile_pic']['tmp_name']) || !is_readable($_FILES['profile_pic']['tmp_name'])) {
+                error_log("Temporary file missing or not readable: {$_FILES['profile_pic']['tmp_name']}");
+                throw new Exception('Temporary file is missing or not readable');
+            }
             if (!move_uploaded_file($_FILES['profile_pic']['tmp_name'], $uploadPath)) {
+                error_log("Failed to move uploaded file from {$_FILES['profile_pic']['tmp_name']} to $uploadPath");
                 throw new Exception('Failed to upload profile picture');
             }
             $profilePic = $filename;
+            error_log("Profile picture uploaded successfully: $uploadPath");
+        } elseif (isset($_FILES['profile_pic']) && $_FILES['profile_pic']['error'] !== UPLOAD_ERR_NO_FILE) {
+            error_log("Profile picture upload error code: {$_FILES['profile_pic']['error']}");
+            throw new Exception('Profile picture upload failed with error code: ' . $_FILES['profile_pic']['error']);
         }
 
         // Hash password
@@ -140,6 +167,107 @@ class User {
             throw new Exception('User not found');
         }
         return $user;
+    }
+
+    public function updateProfile($userId, $username, $email, $full_name, $profile_pic = null) {
+        // Validate username and email uniqueness
+        $stmt = $this->pdo->prepare("SELECT id FROM users WHERE username = ? AND id != ?");
+        $stmt->execute([$username, $userId]);
+        if ($stmt->fetch()) {
+            throw new Exception("Username already taken");
+        }
+        $stmt = $this->pdo->prepare("SELECT id FROM users WHERE email = ? AND id != ?");
+        $stmt->execute([$email, $userId]);
+        if ($stmt->fetch()) {
+            throw new Exception("Email already in use");
+        }
+
+        // Handle profile picture upload
+        $profile_pic_path = $profile_pic ? $profile_pic : 'default.jpg';
+        if (isset($_FILES['profile_pic']) && $_FILES['profile_pic']['size'] > 0) {
+            error_log("Processing profile picture update: " . print_r($_FILES['profile_pic'], true));
+            $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
+            $max_size = 2 * 1024 * 1024; // 2MB
+            $file = $_FILES['profile_pic'];
+            if (!in_array($file['type'], $allowed_types)) {
+                error_log("Invalid profile picture type: {$file['type']}");
+                throw new Exception("Invalid file type. Only JPEG, PNG, and GIF are allowed.");
+            }
+            if ($file['size'] > $max_size) {
+                error_log("Profile picture size exceeds limit: {$file['size']} bytes");
+                throw new Exception("File size exceeds 2MB limit.");
+            }
+            $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+            $filename = 'user_' . $userId . '_' . time() . '.' . $ext;
+            $uploadDir = realpath(__DIR__ . '/../public/uploads') . '/';
+            $uploadPath = $uploadDir . $filename;
+            if (!is_dir($uploadDir)) {
+                if (!mkdir($uploadDir, 0755, true)) {
+                    error_log("Failed to create directory: $uploadDir");
+                    throw new Exception('Failed to create upload directory');
+                }
+            }
+            if (!is_writable($uploadDir)) {
+                error_log("Directory not writable: $uploadDir");
+                throw new Exception('Upload directory is not writable');
+            }
+            if (!file_exists($file['tmp_name']) || !is_readable($file['tmp_name'])) {
+                error_log("Temporary file missing or not readable: {$file['tmp_name']}");
+                throw new Exception('Temporary file is missing or not readable');
+            }
+            if (!move_uploaded_file($file['tmp_name'], $uploadPath)) {
+                error_log("Failed to move uploaded file from {$file['tmp_name']} to $uploadPath");
+                throw new Exception("Failed to upload profile picture.");
+            }
+            $profile_pic_path = $filename;
+            error_log("Profile picture updated successfully: $uploadPath");
+        }
+
+        // Update user data
+        $stmt = $this->pdo->prepare("
+            UPDATE users 
+            SET username = ?, email = ?, full_name = ?, profile_pic = ?
+            WHERE id = ?
+        ");
+        try {
+            $stmt->execute([$username, $email, $full_name, $profile_pic_path, $userId]);
+            error_log("Profile updated for user_id: $userId");
+        } catch (PDOException $e) {
+            error_log("Profile update failed: " . $e->getMessage());
+            throw new Exception("Profile update failed: " . $e->getMessage());
+        }
+    }
+
+    public function changePassword($userId, $current_password, $new_password) {
+        // Verify current password
+        $stmt = $this->pdo->prepare("SELECT password_hash FROM users WHERE id = ?");
+        $stmt->execute([$userId]);
+        $user = $stmt->fetch();
+        if (!$user || !password_verify($current_password, $user['password_hash'])) {
+            throw new Exception("Current password is incorrect");
+        }
+
+        // Validate new password
+        if (strlen($new_password) < 8) {
+            throw new Exception("New password must be at least 8 characters long");
+        }
+
+        // Update password
+        $password_hash = password_hash($new_password, PASSWORD_BCRYPT);
+        $stmt = $this->pdo->prepare("UPDATE users SET password_hash = ? WHERE id = ?");
+        try {
+            $stmt->execute([$password_hash, $userId]);
+            error_log("Password changed for user_id: $userId");
+        } catch (PDOException $e) {
+            error_log("Password change failed: " . $e->getMessage());
+            throw new Exception("Password change failed: " . $e->getMessage());
+        }
+    }
+
+    public function logout() {
+        session_unset();
+        session_destroy();
+        error_log("User logged out");
     }
 }
 ?>
