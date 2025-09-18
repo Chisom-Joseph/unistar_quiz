@@ -1,5 +1,5 @@
 <?php
-define('SITE_URL', 'http://localhost/quizapp');
+define('SITE_URL', 'http://quizapp.test'); // Laragon URL
 define('MIN_PASSWORD_LEN', 8);
 define('PASSWORD_PATTERN', '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/');
 define('MAX_PIC_SIZE', 2 * 1024 * 1024); // 2MB
