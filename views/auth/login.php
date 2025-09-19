@@ -17,7 +17,7 @@ try {
         exit;
     }
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
         try {
             validateCsrf($_POST['csrf'] ?? '');
             $email = trim($_POST['email'] ?? '');
@@ -85,7 +85,7 @@ error_log("Loading login page, error=" . ($_GET['error'] ?? 'none') . ", session
                                     </div>
                                 </div>
                                 <div class="it-signup-forget d-flex justify-content-between flex-wrap">
-                                    <a class="mb-20" href="?page=forgot_password">Forgot Password?</a>
+                                    <a class="mb-20" href="?page=forgot">Forgot Password?</a>
                                     <div class="it-signup-agree mb-20">
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" name="remember_me" id="flexCheckDefault">
