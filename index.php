@@ -13,19 +13,24 @@ $admin = new Admin();
 $quiz = new Quiz();
 $payment = new Payment();
 
-$page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
+$page = isset($_GET['page']) ? $_GET['page'] : 'home';
 
 if (!isset($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
 try {
-    if (!$user->isLoggedIn() && !in_array($page, ['login', 'register', 'verify', 'forgot_password', 'reset_password'])) {
+    // Allow public access to 'home', 'login', 'register', 'verify', 'forgot_password', 'reset_password'
+    if (!$user->isLoggedIn() && !in_array($page, ['home', 'login', 'register', 'verify', 'forgot_password', 'reset_password'])) {
+        error_log("Unauthenticated access to page=$page, redirecting to login");
         header('Location: ' . SITE_URL . '/?page=login&error=not_logged_in');
         exit;
     }
 
     switch ($page) {
+        case 'home':
+            include 'views/home.php';
+            break;
         case 'login':
             include 'views/auth/login.php';
             break;
@@ -49,6 +54,9 @@ try {
             break;
         case 'quiz':
             include 'views/user/quiz.php';
+            break;
+        case 'quiz_results':
+            include 'views/user/quiz_results.php';
             break;
         case 'admin_dashboard':
             if (!Admin::isAdmin($_SESSION['user_id'])) {
@@ -92,11 +100,12 @@ try {
             break;
         case 'logout':
             $user->logout();
-            header('Location: ' . SITE_URL . '/?page=login');
+            header('Location: ' . SITE_URL . '/?page=login&message=logged_out');
             exit;
         default:
-            header('Location: ' . SITE_URL . '/?page=dashboard');
-            exit;
+            error_log("Unknown page requested: $page");
+            include 'views/errors/404.php';
+            break;
     }
 } catch (Exception $e) {
     error_log("Error in index.php: " . $e->getMessage());
