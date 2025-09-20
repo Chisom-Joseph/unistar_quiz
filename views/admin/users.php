@@ -54,16 +54,21 @@ try {
     <?php elseif (isset($success)): ?>
         <div class="alert alert-success" role="alert"><?php echo htmlspecialchars($success); ?></div>
     <?php endif; ?>
-    <div class="card shadow-sm">
-        <div class="card-body">
-            <h5 class="card-title">User List</h5>
+    <div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">User List</h4>
+            </div>
+            <div class="card-body">
             <?php if (empty($users)): ?>
                 <p class="card-text">No users found.</p>
             <?php else: ?>
                 <div class="table-responsive">
-                    <table class="table table-striped">
+                    <table id="example3" class="display" style="min-width: 845px">
                         <thead>
                             <tr>
+                                <th></th>
                                 <th>Username</th>
                                 <th>Email</th>
                                 <th>Full Name</th>
@@ -75,18 +80,19 @@ try {
                         <tbody>
                             <?php foreach ($users as $u): ?>
                                 <tr>
+                                    <td><img class="rounded-circle" width="35" height="35" src="<?php echo SITE_URL . "/public/uploads/" . htmlspecialchars($userData['profile_pic']); ?>" alt="" style="object-fit:cover;"></td>
                                     <td><?php echo htmlspecialchars($u['username']); ?></td>
                                     <td><?php echo htmlspecialchars($u['email']); ?></td>
                                     <td><?php echo htmlspecialchars($u['full_name']); ?></td>
                                     <td><?php echo htmlspecialchars($u['role']); ?></td>
-                                    <td><?php echo $u['is_active'] ? 'Active' : 'Inactive'; ?></td>
+                                    <td><?php echo $u['is_active'] ? '<span class="badge light badge-success">Active</span>' : '<span class="badge light badge-warning">Inactive</span>'; ?></td>
                                     <td>
                                         <form method="POST" action="?page=admin_users" class="d-inline">
                                             <input type="hidden" name="csrf" value="<?php echo htmlspecialchars($_SESSION['csrf_token'] ?? ''); ?>">
                                             <input type="hidden" name="user_id" value="<?php echo $u['id']; ?>">
                                             <input type="hidden" name="is_active" value="<?php echo $u['is_active'] ? 0 : 1; ?>">
                                             <input type="hidden" name="toggle_user" value="1">
-                                            <button type="submit" class="btn btn-sm btn-<?php echo $u['is_active'] ? 'danger' : 'success'; ?>">
+                                            <button type="submit" class="btn btn-xs btn-<?php echo $u['is_active'] ? 'danger' : 'success'; ?>">
                                                 <?php echo $u['is_active'] ? 'Deactivate' : 'Activate'; ?>
                                             </button>
                                         </form>
@@ -96,11 +102,13 @@ try {
                         </tbody>
                     </table>
                 </div>
-            <?php endif; ?>
+                <?php endif; ?>
+            </div>
         </div>
+    </div>
     </div>
 </div>
 <?php
 $content = ob_get_clean();
-include 'views/layouts/main.php';
+include 'views/layouts/dashboard.php';
 ?>

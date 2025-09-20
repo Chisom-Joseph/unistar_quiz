@@ -154,7 +154,7 @@
                                  <span>
                                     <span class="icon"><i class="fa-solid fa-user"></i></span>
                                     <a href="<?php echo SITE_URL; ?>/?page=<?php echo $userData['role'] === 'admin' ? 'admin_dashboard' : 'dashboard'; ?>" class="text">Dashboard</a>/
-                                    <a href="<?php echo SITE_URL; ?>/?page=logout" class="text">Register</a>
+                                    <a href="<?php echo SITE_URL; ?>/?page=logout" class="text">Logout</a>
                                  </span>
                               </div>
                            </li>
