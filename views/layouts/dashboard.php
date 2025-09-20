@@ -738,15 +738,24 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
     <div class="deznav-scroll">
         <ul class="metismenu" id="menu">
             <li class="<?php echo ($currentPage === 'admin_dashboard') ? 'mm-active' : ''; ?>">
-                <a href="<?php echo htmlspecialchars($u['role']) == "admin" ? "/?page=admin_dashboard" : "?page=dashboard"; ?>" class="ai-icon <?php echo ($currentPage === 'admin_dashboard') ? 'mm-active' : ''; ?>" aria-expanded="false">
+                <a href="<?php echo htmlspecialchars($userData['role']) == "admin" ? "/?page=admin_dashboard" : "?page=dashboard"; ?>" class="ai-icon <?php echo ($currentPage === 'admin_dashboard') ? 'mm-active' : ''; ?>" aria-expanded="false">
                     <i class="flaticon-025-dashboard"></i>
                     <span class="nav-text">Dashboard </span>
                 </a>
             </li>
             <li class="<?php echo ($currentPage === 'admin_users') ? 'mm-active' : ''; ?>">
-                <a href="/?page=admin_users" class="ai-icon <?php echo ($currentPage === 'admin_users') ? 'mm-active' : ''; ?>" aria-expanded="false">
-                    <i class="flaticon-025-user"></i>
-                    <span class="nav-text">User </span>
+                <a href="/?page=admin_users" 
+                class="ai-icon <?php echo ($currentPage === 'admin_users') ? 'mm-active' : ''; ?>" aria-expanded="false">
+                     <i class="flaticon-381-user-9"></i>
+                    <span class="nav-text">Users</span>
+                </a>
+            </li>
+
+            <li class="<?php echo ($currentPage === 'admin_quizzes') ? 'mm-active' : ''; ?>">
+                <a href="/?page=admin_quizzes" 
+                class="ai-icon <?php echo ($currentPage === 'admin_quizzes') ? 'mm-active' : ''; ?>" aria-expanded="false">
+                    <i class="flaticon-381-list"></i>
+                    <span class="nav-text">Quizzes</span>
                 </a>
             </li>
             <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">

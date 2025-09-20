@@ -104,8 +104,10 @@ try {
         <div class="alert alert-success" role="alert"><?php echo htmlspecialchars($success); ?></div>
     <?php endif; ?>
     <div class="card shadow-sm mb-4">
+        <div class="card-header">
+            <h4 class="card-title">Create Quiz</h4>
+        </div>
         <div class="card-body">
-            <h5 class="card-title">Create Quiz</h5>
             <form method="POST" action="?page=admin_quizzes">
                 <input type="hidden" name="csrf" value="<?php echo htmlspecialchars($_SESSION['csrf_token'] ?? ''); ?>">
                 <input type="hidden" name="create_quiz" value="1">
@@ -137,13 +139,15 @@ try {
         </div>
     </div>
     <div class="card shadow-sm">
+        <div class="card-header">
+            <h4 class="card-title">Quiz List</h4>
+        </div>
         <div class="card-body">
-            <h5 class="card-title">Quiz List</h5>
             <?php if (empty($quizzes)): ?>
                 <p class="card-text">No quizzes found.</p>
             <?php else: ?>
                 <div class="table-responsive">
-                    <table class="table table-striped">
+                    <table id="example3" class="display">
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -165,14 +169,14 @@ try {
                                     <td><?php echo htmlspecialchars($quiz['timer_minutes']); ?></td>
                                     <td><?php echo $quiz['attempts']; ?></td>
                                     <td>
-                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editQuizModal<?php echo $quiz['id']; ?>">Edit</button>
+                                        <button class="btn btn-xs btn-primary" data-bs-toggle="modal" data-bs-target="#editQuizModal<?php echo $quiz['id']; ?>">Edit</button>
                                         <form method="POST" action="?page=admin_quizzes" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this quiz?');">
                                             <input type="hidden" name="csrf" value="<?php echo htmlspecialchars($_SESSION['csrf_token'] ?? ''); ?>">
                                             <input type="hidden" name="quiz_id" value="<?php echo $quiz['id']; ?>">
                                             <input type="hidden" name="delete_quiz" value="1">
-                                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                            <button type="submit" class="btn btn-xs btn-danger">Delete</button>
                                         </form>
-                                        <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#manageQuestionsModal<?php echo $quiz['id']; ?>">Manage Questions</button>
+                                        <button class="btn btn-xs btn-info" data-bs-toggle="modal" data-bs-target="#manageQuestionsModal<?php echo $quiz['id']; ?>">Manage Questions</button>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -372,5 +376,5 @@ try {
 </div>
 <?php
 $content = ob_get_clean();
-include 'views/layouts/main.php';
+include 'views/layouts/dashboard.php';
 ?>
