@@ -46,8 +46,10 @@ try {
         <div class="alert alert-success" role="alert"><?php echo htmlspecialchars($success); ?></div>
     <?php endif; ?>
     <div class="card shadow-sm mb-4">
+        <div class="card-header">
+            <h4 class="card-title">Create Course</h4>
+        </div>
         <div class="card-body">
-            <h5 class="card-title">Create Course</h5>
             <form method="POST" action="?page=admin_courses">
                 <input type="hidden" name="csrf" value="<?php echo htmlspecialchars($_SESSION['csrf_token'] ?? ''); ?>">
                 <input type="hidden" name="create_course" value="1">
@@ -64,13 +66,15 @@ try {
         </div>
     </div>
     <div class="card shadow-sm">
+        <div class="card-header">
+            <h4 class="card-title">Course List</h4>
+        </div>
         <div class="card-body">
-            <h5 class="card-title">Course List</h5>
             <?php if (empty($courses)): ?>
                 <p class="card-text">No courses found.</p>
             <?php else: ?>
                 <div class="table-responsive">
-                    <table class="table table-striped">
+                    <table id="example3" class="display">
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -95,5 +99,5 @@ try {
 </div>
 <?php
 $content = ob_get_clean();
-include 'views/layouts/main.php';
+include 'views/layouts/dashboard.php';
 ?>

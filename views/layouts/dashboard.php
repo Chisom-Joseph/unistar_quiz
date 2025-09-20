@@ -746,7 +746,6 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                     <span class="nav-text">Users</span>
                 </a>
             </li>
-
             <li class="<?php echo ($currentPage === 'admin_quizzes') ? 'mm-active' : ''; ?>">
                 <a href="/?page=admin_quizzes" 
                 class="ai-icon <?php echo ($currentPage === 'admin_quizzes') ? 'mm-active' : ''; ?>" aria-expanded="false">
@@ -754,7 +753,14 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                     <span class="nav-text">Quizzes</span>
                 </a>
             </li>
-            <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+            <li class="<?php echo ($currentPage === 'admin_courses') ? 'mm-active' : ''; ?>">
+                <a href="/?page=admin_courses" 
+                class="ai-icon <?php echo ($currentPage === 'admin_courses') ? 'mm-active' : ''; ?>" aria-expanded="false">
+                    <i class="flaticon-381-book"></i>
+                    <span class="nav-text">Courses</span>
+                </a>
+            </li>
+            <!-- <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
                     <i class="flaticon-025-dashboard"></i>
                     <span class="nav-text">Dashboard</span>
                 </a>
@@ -767,7 +773,7 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                     <li><a href="finance.html">Finance</a></li>
                     <li><a href="food.html">Food</a></li>
                 </ul>
-            </li>
+            </li> -->
         </ul>
         <div class="drum-box">
             <img src="/public/images/ellipse5.png" alt="">

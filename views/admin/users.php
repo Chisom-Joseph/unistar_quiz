@@ -80,7 +80,7 @@ try {
                         <tbody>
                             <?php foreach ($users as $u): ?>
                                 <tr>
-                                    <td><img class="rounded-circle" width="35" height="35" src="<?php echo SITE_URL . "/public/uploads/" . htmlspecialchars($userData['profile_pic']); ?>" alt="" style="object-fit:cover;"></td>
+                                    <td><img class="rounded-circle" width="35" height="35" src="<?php echo SITE_URL . "/public/uploads/" . htmlspecialchars($u['profile_pic']); ?>" alt="" style="object-fit:cover;"></td>
                                     <td><?php echo htmlspecialchars($u['username']); ?></td>
                                     <td><?php echo htmlspecialchars($u['email']); ?></td>
                                     <td><?php echo htmlspecialchars($u['full_name']); ?></td>
