@@ -1,4 +1,4 @@
 deployment:
   tasks:
-    - export DEPLOY_PATH=/home/unkkmxbz/unistar.com.ng
+    - export DEPLOY_PATH=/home/fluxcryp/unistar.com.ng
     - /bin/cp -r * $DEPLOY_PATH
