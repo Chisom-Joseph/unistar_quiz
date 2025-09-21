@@ -2,7 +2,7 @@ CREATE DATABASE unistar_quiz CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE unistar_quiz;
 
 -- Users table
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
@@ -17,8 +17,17 @@ CREATE TABLE users (
     INDEX idx_username (username)
 );
 
+-- Reset tokens
+CREATE TABLE IF NOT EXISTS reset_tokens (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    token VARCHAR(64) NOT NULL,
+    expires_at DATETIME NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
 -- Courses
-CREATE TABLE courses (
+CREATE TABLE IF NOT EXISTS courses (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     description TEXT,
@@ -26,7 +35,7 @@ CREATE TABLE courses (
 );
 
 -- Quizzes
-CREATE TABLE quizzes (
+CREATE TABLE IF NOT EXISTS quizzes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     course_id INT NOT NULL,
     name VARCHAR(100) NOT NULL,
@@ -37,7 +46,7 @@ CREATE TABLE quizzes (
 );
 
 -- Questions (options as JSON: ["opt1", "opt2", ...])
-CREATE TABLE questions (
+CREATE TABLE IF NOT EXISTS questions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     quiz_id INT NOT NULL,
     text TEXT NOT NULL,
@@ -49,7 +58,7 @@ CREATE TABLE questions (
 );
 
 -- Attempts (answers as JSON: {"q1_id": 0, "q2_id": 1, ...})
-CREATE TABLE attempts (
+CREATE TABLE IF NOT EXISTS attempts (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     quiz_id INT NOT NULL,
@@ -63,7 +72,7 @@ CREATE TABLE attempts (
 );
 
 -- Payments
-CREATE TABLE payments (
+CREATE TABLE IF NOT EXISTS payments (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     amount DECIMAL(10,2) NOT NULL,
@@ -74,7 +83,7 @@ CREATE TABLE payments (
 );
 
 -- Feature Flags
-CREATE TABLE feature_flags (
+CREATE TABLE IF NOT EXISTS feature_flags (
     id INT AUTO_INCREMENT PRIMARY KEY,
     flag_name VARCHAR(50) UNIQUE NOT NULL,
     value TINYINT(1) DEFAULT 0,  -- bool as int
@@ -82,7 +91,7 @@ CREATE TABLE feature_flags (
 );
 
 -- Reset Tokens
-CREATE TABLE reset_tokens (
+CREATE TABLE IF NOT EXISTS reset_tokens (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     token VARCHAR(255) NOT NULL,
@@ -92,7 +101,7 @@ CREATE TABLE reset_tokens (
 );
 
 -- Notifications (for logging, but emails sent immediately)
-CREATE TABLE notifications (
+CREATE TABLE IF NOT EXISTS notifications (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
     type VARCHAR(50) NOT NULL,
@@ -103,7 +112,7 @@ CREATE TABLE notifications (
 );
 
 -- Sessions (for tracking activity, optional)
-CREATE TABLE sessions (
+CREATE TABLE IF NOT EXISTS sessions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     session_id VARCHAR(255) NOT NULL,
