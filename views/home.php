@@ -312,30 +312,32 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
          <div class="container">
             <div class="row align-items-end">
                <div class="col-xl-6">
-                  <div class="it-hero-3-title-wrap it-hero-3-ptb">
+                     <div class="it-hero-3-title-wrap it-hero-3-ptb">
                      <div class="it-hero-3-title-box">
-                        <h1 class="it-hero-3-title">Learn new skills online with top <span>educators.</span></h1>
-                        <p>We are experienced in educationl platform and skilled strategies <br>
-                           for the success of our online learning.</p>
+                     <h1 class="it-hero-3-title">Challenge your mind with fun <span>quizzes.</span></h1>
+                     <p>Test your knowledge, learn new facts, and track your progress <br>
+                        with our interactive and engaging quiz platform.</p>
                      </div>
+
                      <div class="it-hero-3-btn-box d-flex align-items-center">
-                        <a class="it-btn-white" href="course-details.html">
-                           <span>
-                              Find The Course
-                              <svg width="17" height="14" viewBox="0 0 17 14" fill="none"
-                                 xmlns="http://www.w3.org/2000/svg">
-                                 <path d="M11 1.24023L16 7.24023L11 13.2402" stroke="currentcolor" stroke-width="1.5"
-                                    stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                                 <path d="M1 7.24023H16" stroke="currentcolor" stroke-width="1.5" stroke-miterlimit="10"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                              </svg>
-                           </span>
-                        </a>
-                        <div class="it-hero-3-client-box d-flex align-items-center">
-                           <span>Happy <br> Students</span>
-                           <img src="/public/img/hero/hero-3-client-img.png" alt="">
-                        </div>
+                     <a class="it-btn-white" href="quiz-categories.html">
+                        <span>
+                           Take a Quiz
+                           <svg width="17" height="14" viewBox="0 0 17 14" fill="none"
+                           xmlns="http://www.w3.org/2000/svg">
+                           <path d="M11 1.24023L16 7.24023L11 13.2402" stroke="currentcolor" stroke-width="1.5"
+                              stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                           <path d="M1 7.24023H16" stroke="currentcolor" stroke-width="1.5" stroke-miterlimit="10"
+                              stroke-linecap="round" stroke-linejoin="round" />
+                           </svg>
+                        </span>
+                     </a>
+                     <div class="it-hero-3-client-box d-flex align-items-center">
+                        <span>Happy <br> Players</span>
+                        <img src="/public/img/hero/hero-3-client-img.png" alt="">
                      </div>
+                     </div>
+
                   </div>
                </div>
                <div class="col-xl-6">
@@ -373,51 +375,61 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                </div>
                <div class="col-xl-6 col-lg-6">
                   <div class="it-about-3-title-box">
-                     <span class="it-section-subtitle-3">
-                        <img src="/public/img/about/bg.svg" alt="">
-                        about us
-                     </span>
-                     <h2 class="it-section-title-3 pb-30">Benefit from our online
-                        learning expertise earn <span>professional</span>
-                     </h2>
-                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do <br>
-                        eiusmod tempor incididunt ut labore.</p>
+                  <span class="it-section-subtitle-3">
+                     <img src="/public/img/about/bg.svg" alt="">
+                     about us
+                  </span>
+                  <h2 class="it-section-title-3 pb-30">
+                     Boost your knowledge with <span>interactive quizzes</span>
+                  </h2>
+                  <p>
+                     We make learning fun and engaging through well-crafted quizzes that test, 
+                     challenge, and improve your understanding across different topics.
+                  </p>
                   </div>
+
                   <div class="it-about-3-mv-box">
-                     <div class="row">
-                        <div class="col-xl-6 col-md-6">
-                           <div class="it-about-3-mv-item">
-                              <span class="it-about-3-mv-title">OUR MISSION:</span>
-                              <p>Suspendisse ultrice gravida dictum fusce placerat ultricies integer quis auctor elit
-                                 sed vulputate mi sit.</p>
-                           </div>
+                  <div class="row">
+                     <div class="col-xl-6 col-md-6">
+                        <div class="it-about-3-mv-item">
+                        <span class="it-about-3-mv-title">OUR MISSION:</span>
+                        <p>
+                           To make learning exciting by providing quizzes that inspire curiosity, 
+                           sharpen knowledge, and encourage continuous growth.
+                        </p>
                         </div>
-                        <div class="col-xl-6 col-md-6">
-                           <div class="it-about-3-mv-item">
-                              <span class="it-about-3-mv-title">OUR VISSION:</span>
-                              <p>Suspendisse ultrice gravida dictum fusce placerat ultricies integer quis auctor elit
-                                 sed vulputate mi sit.</p>
-                           </div>
+                     </div>
+                     <div class="col-xl-6 col-md-6">
+                        <div class="it-about-3-mv-item">
+                        <span class="it-about-3-mv-title">OUR VISION:</span>
+                        <p>
+                           To become the leading quiz platform where students, learners, and 
+                           enthusiasts can test their skills, track progress, and enjoy learning 
+                           through fun challenges.
+                        </p>
                         </div>
                      </div>
                   </div>
+                  </div>
+
                   <div class="it-about-3-btn-box p-relative">
-                     <a class="it-btn-yellow" href="about-us.html">
-                        <span>
-                           admission open
-                           <svg width="17" height="14" viewBox="0 0 17 14" fill="none"
-                              xmlns="http://www.w3.org/2000/svg">
-                              <path d="M11 1.24023L16 7.24023L11 13.2402" stroke="currentcolor" stroke-width="1.5"
-                                 stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                              <path d="M1 7.24023H16" stroke="currentcolor" stroke-width="1.5" stroke-miterlimit="10"
-                                 stroke-linecap="round" stroke-linejoin="round" />
-                           </svg>
-                        </span>
-                     </a>
-                     <div class="it-about-3-left-shape-3 d-none d-md-block">
-                        <img src="/public/img/about/about-3-shap-3.png" alt="">
-                     </div>
+                  <a class="it-btn-yellow" href="about-us.html">
+                     <span>
+                        Start Playing
+                        <svg width="17" height="14" viewBox="0 0 17 14" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11 1.24023L16 7.24023L11 13.2402" stroke="currentcolor" stroke-width="1.5"
+                           stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M1 7.24023H16" stroke="currentcolor" stroke-width="1.5" stroke-miterlimit="10"
+                           stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                     </span>
+                  </a>
+                  <div class="it-about-3-left-shape-3 d-none d-md-block">
+                     <img src="/public/img/about/about-3-shap-3.png" alt="">
                   </div>
+                  </div>
+
                </div>
             </div>
          </div>
