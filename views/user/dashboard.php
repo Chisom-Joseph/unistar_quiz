@@ -35,8 +35,10 @@ try {
         </div>
         <div class="col-md-8">
             <div class="card mb-4">
+                <div class="card-header">
+                    <h4 class="card-title">Available Quizzes</h4>
+                </div>
                 <div class="card-body">
-                    <h5 class="card-title">Available Quizzes</h5>
                     <?php if (empty($quizzes)): ?>
                         <p>No available quizzes.</p>
                     <?php else: ?>
@@ -57,5 +59,5 @@ try {
 </div>
 <?php
 $content = ob_get_clean();
-include 'views/layouts/main.php';
+include 'views/layouts/dashboard.php';
 ?>

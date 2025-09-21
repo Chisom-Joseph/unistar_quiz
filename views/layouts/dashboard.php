@@ -739,6 +739,7 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                     <span class="nav-text">Dashboard </span>
                 </a>
             </li>
+			<?php if($userData['role'] == "admin"): ?>
             <li class="<?php echo ($currentPage === 'admin_users') ? 'mm-active' : ''; ?>">
                 <a href="/?page=admin_users" 
                 class="ai-icon <?php echo ($currentPage === 'admin_users') ? 'mm-active' : ''; ?>" aria-expanded="false">
@@ -760,6 +761,7 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                     <span class="nav-text">Courses</span>
                 </a>
             </li>
+			<?php endif; ?>
             <!-- <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
                     <i class="flaticon-025-dashboard"></i>
                     <span class="nav-text">Dashboard</span>
