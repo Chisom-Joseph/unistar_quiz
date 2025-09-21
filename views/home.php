@@ -1,14 +1,23 @@
 <?php
 // views/layouts/main.php
+ob_start();
 require_once 'config/constants.php';
 require_once 'includes/auth.php';
 require_once 'classes/User.php';
 
 $user = new User();
 $isLoggedIn = isset($_SESSION['user_id']);
-$userData = $isLoggedIn ? $user->getUserData($_SESSION['user_id']) : null;
+$userData = null;
+if ($user->isLoggedIn()) {
+    try {
+        $userData = $user->getUserData($_SESSION['user_id']);
+    } catch (Exception $e) {
+        error_log("Error fetching user data on home page: " . $e->getMessage());
+    }
+}
 $isAdmin = $isLoggedIn && $userData['role'] === 'admin';
 $currentPage = isset($_GET['page']) ? $_GET['page'] : ''; 
+
 ?>
 <!doctype html>
 <html class="no-js" lang="zxx">
@@ -252,11 +261,36 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
    </header>
 
 <main>
-      <?php if (isset($_GET['message']) && $_GET['message'] === 'installed'): ?>
-         <div class="alert alert-success" role="alert">
-            Installation successful! Admin account created: admin@quizapp.test / admin123
-         </div>
-      <?php endif; ?>
+<!-- Installation Success Modal -->
+    <?php if (isset($_GET['message']) && $_GET['message'] === 'installed'): ?>
+        <div class="modal fade" id="installSuccessModal" tabindex="-1" aria-labelledby="installSuccessModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="installSuccessModalLabel">Installation Successful</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-success mb-0" role="alert">
+                            Admin account created: <strong>admin@quizapp.test</strong> / <strong>admin123</strong>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn it-btn large" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var installModal = new bootstrap.Modal(document.getElementById('installSuccessModal'), {
+                    backdrop: true,
+                    keyboard: true
+                });
+                installModal.show();
+            });
+        </script>
+    <?php endif; ?>
 
       <!-- hero-area-start -->
       <div class="it-hero-3-area theme-bg-2">

@@ -3,6 +3,12 @@
 require_once 'config/constants.php';
 require_once 'classes/Database.php';
 
+function outputError($message) {
+    error_log("Install error: " . $message);
+    die('<div style="color: red; font-weight: bold;">Installation failed: ' . htmlspecialchars($message) . '</div><br><a href="javascript:history.back()">Go Back</a>');
+}
+
+echo "<h3>Starting installation...</h3>";
 error_log("Starting installation process, session_id=" . session_id());
 
 // Initialize PDO without specifying a database (for creating unistar_quiz)
@@ -13,34 +19,42 @@ try {
         DB_PASS,
         DB_OPTIONS
     );
+    echo "<p>Connected to MySQL successfully.</p>";
 } catch (PDOException $e) {
-    error_log("Failed to connect to MySQL server: " . $e->getMessage());
-    die('Installation failed: Could not connect to MySQL server. Check config/constants.php.');
+    outputError("Could not connect to MySQL server: " . $e->getMessage() . ". Check config/constants.php.");
 }
 
 // Create database
 try {
     $pdo->exec("CREATE DATABASE IF NOT EXISTS " . DB_NAME . " CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
     $pdo->exec("USE " . DB_NAME);
+    echo "<p>Database '" . DB_NAME . "' created/selected successfully.</p>";
 } catch (PDOException $e) {
-    error_log("Failed to create/use database: " . $e->getMessage());
-    die('Installation failed: Could not create database.');
+    outputError("Could not create/use database: " . $e->getMessage());
 }
 
 // Execute schema.sql
 $schemaFile = __DIR__ . '/sql/schema.sql';
 if (!file_exists($schemaFile)) {
-    error_log("Schema file not found: $schemaFile");
-    die('Installation failed: Schema file not found.');
+    outputError("Schema file not found: $schemaFile");
 }
 
 try {
     $schemaSql = file_get_contents($schemaFile);
-    $pdo->exec($schemaSql);
-    error_log("Database schema applied successfully");
-} catch (PDOException $e) {
-    error_log("Failed to apply schema: " . $e->getMessage());
-    die('Installation failed: Could not apply schema.');
+    $statements = array_filter(array_map('trim', explode(';', $schemaSql)), fn($s) => !empty($s));
+    $statementCount = count($statements);
+    echo "<p>Applying $statementCount schema statements...</p>";
+    foreach ($statements as $index => $statement) {
+        try {
+            $pdo->exec($statement);
+            echo "<p>Statement " . ($index + 1) . " executed successfully.</p>";
+        } catch (PDOException $e) {
+            outputError("Failed to execute statement " . ($index + 1) . ": " . $e->getMessage() . "<br>Statement: " . htmlspecialchars(substr($statement, 0, 200)) . "...");
+        }
+    }
+    echo "<p>Database schema applied successfully!</p>";
+} catch (Exception $e) {
+    outputError("Could not apply schema: " . $e->getMessage());
 }
 
 // Insert sample quiz data using Database class
@@ -61,35 +75,38 @@ try {
         (1, 'Which planet is known as the Red Planet?', '[\"Jupiter\", \"Mars\", \"Venus\", \"Mercury\"]', 1, 'Mars is called the Red Planet due to its reddish appearance.', 5)
         ON DUPLICATE KEY UPDATE text = text;
     ");
-    error_log("Sample quiz data inserted successfully");
+    echo "<p>Sample quiz data inserted successfully.</p>";
 } catch (PDOException $e) {
-    error_log("Failed to insert sample quiz data: " . $e->getMessage());
-    die('Installation failed: Could not insert sample quiz data.');
+    echo "<p>Warning: Could not insert sample quiz data: " . $e->getMessage() . "</p>";
 }
 
 // Create admin user
 try {
     $adminPassword = 'admin123';
     $adminPasswordHash = password_hash($adminPassword, PASSWORD_BCRYPT);
+    $db = Database::getInstance();
     $db->exec("
         INSERT INTO users (username, email, password_hash, full_name, is_active, is_verified, role) 
         VALUES ('admin', 'admin@quizapp.test', '$adminPasswordHash', 'Admin User', 1, 1, 'admin')
         ON DUPLICATE KEY UPDATE email = email;
     ");
-    error_log("Admin user created successfully");
+    echo "<p>Admin user created successfully: admin@quizapp.test / admin123</p>";
 } catch (PDOException $e) {
-    error_log("Failed to create admin user: " . $e->getMessage());
-    die('Installation failed: Could not create admin user.');
+    echo "<p>Warning: Could not create admin user: " . $e->getMessage() . "</p>";
 }
 
 // Optionally delete install.php for security
 if (unlink(__FILE__)) {
     error_log("install.php deleted successfully");
+    echo "<p>install.php deleted for security.</p>";
 } else {
     error_log("Failed to delete install.php");
+    echo "<p>Warning: Could not delete install.php. Please delete manually for security.</p>";
 }
 
-// Redirect to homepage
-header('Location: ' . SITE_URL . '/?page=home&message=installed');
+// Success message and redirect
+echo "<p><strong>Installation completed successfully!</strong></p>";
+echo "<p>Redirecting to homepage in 3 seconds...</p>";
+echo "<script>setTimeout(function() { window.location.href = '" . SITE_URL . "/?page=home&message=installed'; }, 3000);</script>";
 exit;
 ?>
