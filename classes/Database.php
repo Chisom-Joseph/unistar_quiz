@@ -1,22 +1,23 @@
 <?php
 // classes/Database.php
+require_once 'config/database.php';
+
 class Database {
     private static $instance = null;
     private $pdo;
 
     private function __construct() {
-        $dsn = 'mysql:host=localhost;dbname=unistar_quiz;charset=utf8mb4';
-        $username = 'root';
-        $password = '';
-        $options = [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_EMULATE_PREPARES => false,
-        ];
+        $config = require 'config/database.php';
 
         try {
-            $this->pdo = new PDO($dsn, $username, $password, $options);
+            $this->pdo = new PDO(
+                $config['dsn'],
+                $config['username'],
+                $config['password'],
+                $config['options']
+            );
         } catch (PDOException $e) {
+            error_log("Database connection failed: " . $e->getMessage());
             die('Database connection failed: ' . $e->getMessage());
         }
     }
@@ -29,12 +30,13 @@ class Database {
     }
 
     public static function query($sql, $params = []) {
-        $pdo = self::getInstance(); // Use singleton PDO
+        $pdo = self::getInstance();
         try {
             $stmt = $pdo->prepare($sql);
             $stmt->execute($params);
             return $stmt;
         } catch (PDOException $e) {
+            error_log("Query failed: " . $e->getMessage());
             throw new Exception('Query failed: ' . $e->getMessage());
         }
     }
