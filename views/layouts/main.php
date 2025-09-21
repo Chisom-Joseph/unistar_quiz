@@ -1,5 +1,14 @@
 <?php
 // views/layouts/main.php
+require_once 'config/constants.php';
+require_once 'includes/auth.php';
+require_once 'classes/User.php';
+
+$user = new User();
+$isLoggedIn = isset($_SESSION['user_id']);
+$userData = $isLoggedIn ? $user->getUserData($_SESSION['user_id']) : null;
+$isAdmin = $isLoggedIn && $userData['role'] === 'admin';
+$currentPage = isset($_GET['page']) ? $_GET['page'] : ''; 
 ?>
 <!doctype html>
 <html class="no-js" lang="zxx">
@@ -144,7 +153,7 @@
                               <div class="it-header-3-top-right">
                                  <span>
                                     <span class="icon"><i class="fab fa-solid fa-user"></i></span>
-                                    <a href="<?php echo SITE_URL; ?>/?page=<?php echo $userData['role'] === 'admin' ? 'admin_dashboard' : 'dashboard'; ?>" class="text">Dashboard</a>/
+                                    <a href="<?php echo htmlspecialchars($userData['role']) == "admin" ? "/?page=admin_dashboard" : "?page=dashboard"; ?>" class="text">Dashboard</a>/
                                     <a href="<?php echo SITE_URL; ?>/?page=logout" class="text">Logout</a>
                                  </span>
                               </div>
