@@ -602,7 +602,7 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
 									
 							</a>
 					</li>
-					<li class="nav-item dropdown notification_dropdown">
+					<!-- <li class="nav-item dropdown notification_dropdown">
 						<a class="nav-link  ai-icon" href="javascript:void(0)" role="button" data-bs-toggle="dropdown">
 							<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
 								<path d="M25.4707 19.1862L23.3333 15.9802V11.6667C23.3333 9.19135 22.35 6.81738 20.5997 5.06704C18.8493 3.3167 16.4753 2.33337 14 2.33337C11.5246 2.33337 9.15066 3.3167 7.40033 5.06704C5.64999 6.81738 4.66666 9.19135 4.66666 11.6667V15.9802L2.52932 19.1862C2.41256 19.362 2.34562 19.5661 2.33561 19.7769C2.32559 19.9877 2.37288 20.1972 2.47245 20.3833C2.57201 20.5693 2.72013 20.7249 2.90106 20.8335C3.08199 20.9421 3.28897 20.9997 3.49999 21H24.5C24.711 20.9997 24.918 20.9421 25.0989 20.8335C25.2798 20.7249 25.428 20.5693 25.5275 20.3833C25.6271 20.1972 25.6744 19.9877 25.6644 19.7769C25.6544 19.5661 25.5874 19.362 25.4707 19.1862Z" fill="#A5A5A5"/>
@@ -684,7 +684,7 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
 							</div>
 							<a class="all-notification" href="javascript:void(0)">See all notifications <i class="ti-arrow-right"></i></a>
 						</div>
-					</li>
+					</li> -->
 					<li class="nav-item dropdown header-profile">
 						<a class="nav-link" href="#" role="button" data-bs-toggle="dropdown">
 							<img src="<?php echo SITE_URL . "/public/uploads/" . htmlspecialchars($userData['profile_pic']); ?>" width="20" alt="" class="rounded-circle" style="object-fit:cover;">
@@ -762,7 +762,7 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                 </ul>
             </li> -->
         </ul>
-        <div class="drum-box">
+        <!-- <div class="drum-box">
             <img src="/public/images/ellipse5.png" alt="">
             <p class="fs-18 font-w500 mb-4">Auto Generate Admission Report</p>
             <a class="" href="javascript:void(0);"><i class="fa fa-long-arrow-right"></i>
@@ -771,7 +771,7 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
         <div class="copyright">
             <p><strong>Owlio School Admission Admin </strong> © 2023 All Rights Reserved</p>
             <p class="fs-12">Made with <span class="heart"></span> by DexignZone</p>
-        </div>
+        </div> -->
     </div>
 </div>
 <!--**********************************
