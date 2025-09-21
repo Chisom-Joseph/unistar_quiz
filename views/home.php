@@ -74,7 +74,7 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
             <button class="close-btn"><i class="fal fa-times"></i></button>
          </div>
          <div class="itoffcanvas__logo">
-            <a href="index-2.html">
+            <a href="/">
                <img src="/public/img/logo/logo-white.png" alt="">
             </a>
          </div>
@@ -214,7 +214,7 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                      <div class="row align-items-center">
                         <div class="col-xl-2 col-7">
                            <div class="it-header-2-logo">
-                              <a href="index-2.html"><img src="/public/img/logo/logo-yellow.png" alt=""></a>
+                              <a href="/"><img src="/public/img/logo/logo-yellow.png" alt=""></a>
                            </div>
                         </div>
                         <div class="col-xl-7 d-none d-xl-block">
@@ -1344,7 +1344,7 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-50">
                   <div class="it-footer-widget footer-col-1">
                      <div class="it-footer-logo pb-25">
-                        <a href="index-html.html"><img src="/public/img/logo/logo-yellow.png" alt=""></a>
+                        <a href="/"><img src="/public/img/logo/logo-yellow.png" alt=""></a>
                      </div>
                      <div class="it-footer-text pb-5">
                         <p>Interdum velit laoreet id donec ultrices <br> tincidunt arcu. Tincidunt tortor aliquam nulla facilisi cras fermentum odio eu.</p>
