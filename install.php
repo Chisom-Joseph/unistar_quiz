@@ -1,107 +1,95 @@
 <?php
-// index.php
+// install.php
 require_once 'config/constants.php';
-require_once 'includes/auth.php';
-require_once 'classes/User.php';
-require_once 'classes/Quiz.php';
-require_once 'classes/Admin.php';
-require_once 'classes/Payment.php';
-require_once 'classes/Flags.php';
+require_once 'classes/Database.php';
 
-$page = $_GET['page'] ?? 'home';
-error_log("Requested page: $page, session_id=" . session_id() . ", user_id=" . ($_SESSION['user_id'] ?? 'none'));
+error_log("Starting installation process, session_id=" . session_id());
 
-$user = new User();
-$quiz = new Quiz();
-$admin = new Admin();
-$payment = new Payment();
-
-// Redirect logged-in users from auth pages
-if (isset($_SESSION['user_id']) && in_array($page, ['login', 'register', 'verify', 'forgot', 'reset'])) {
-    $userData = $user->getUserData($_SESSION['user_id']);
-    $dashboardPage = $userData['role'] === 'admin' ? 'admin_dashboard' : 'dashboard';
-    error_log("Redirecting logged-in user_id: {$_SESSION['user_id']} from $page to $dashboardPage");
-    header('Location: ' . SITE_URL . '/?page=' . $dashboardPage);
-    exit;
+// Initialize PDO without specifying a database (for creating unistar_quiz)
+try {
+    $pdo = new PDO(
+        'mysql:host=' . DB_HOST . ';charset=' . DB_CHARSET,
+        DB_USER,
+        DB_PASS,
+        DB_OPTIONS
+    );
+} catch (PDOException $e) {
+    error_log("Failed to connect to MySQL server: " . $e->getMessage());
+    die('Installation failed: Could not connect to MySQL server. Check config/constants.php.');
 }
 
-switch ($page) {
-    case 'register':
-        if ($_POST) {
-            error_log("Register submission: session_id=" . session_id() . ", submitted_csrf=" . ($_POST['csrf'] ?? 'none') . ", post_data=" . json_encode($_POST));
-            try {
-                validateCsrf($_POST['csrf'] ?? '');
-                $userId = $user->register($_POST);
-                header('Location: ' . SITE_URL . '/?page=verify&user=' . $userId);
-                exit;
-            } catch (Exception $e) {
-                $error = $e->getMessage();
-            }
-        }
-        include 'views/auth/register.php';
-        break;
-    case 'login':
-        if ($_POST) {
-            error_log("Login submission: session_id=" . session_id() . ", submitted_csrf=" . ($_POST['csrf'] ?? 'none') . ", post_data=" . json_encode($_POST));
-            try {
-                validateCsrf($_POST['csrf'] ?? '');
-                if (!isset($_POST['email']) || !isset($_POST['password'])) {
-                    throw new Exception('Email and password are required');
-                }
-                $userId = $user->login($_POST['email'], $_POST['password']);
-                $userData = $user->getUserData($userId);
-                $dashboardPage = $userData['role'] === 'admin' ? 'admin_dashboard' : 'dashboard';
-                header('Location: ' . SITE_URL . '/?page=' . $dashboardPage);
-                exit;
-            } catch (Exception $e) {
-                $error = $e->getMessage();
-            }
-        }
-        include 'views/auth/login.php';
-        break;
-    case 'logout':
-        error_log("Logout initiated for user_id: " . ($_SESSION['user_id'] ?? 'none') . ", session_id=" . session_id());
-        session_unset();
-        session_destroy();
-        session_start();
-        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-        error_log("New CSRF token generated after logout: " . $_SESSION['csrf_token'] . ", session_id=" . session_id());
-        header('Location: ' . SITE_URL . '/?page=login&message=logged_out');
-        exit;
-        break;
-    case 'dashboard':
-        error_log("Loading user dashboard page");
-        if (!isset($_SESSION['user_id'])) {
-            error_log("Unauthorized access to dashboard, redirecting to login");
-            header('Location: ' . SITE_URL . '/?page=login&error=not_logged_in');
-            exit;
-        }
-        $userData = $user->getUserData($_SESSION['user_id']);
-        if ($userData['role'] === 'admin') {
-            error_log("Admin user_id: {$_SESSION['user_id']} redirected to admin_dashboard");
-            header('Location: ' . SITE_URL . '/?page=admin_dashboard');
-            exit;
-        }
-        include 'views/user/dashboard.php';
-        break;
-    case 'admin_dashboard':
-        error_log("Loading admin dashboard page");
-        if (!isset($_SESSION['user_id'])) {
-            error_log("Unauthorized access to admin dashboard, redirecting to login");
-            header('Location: ' . SITE_URL . '/?page=login&error=not_logged_in');
-            exit;
-        }
-        $userData = $user->getUserData($_SESSION['user_id']);
-        if ($userData['role'] !== 'admin') {
-            error_log("Non-admin user_id: {$_SESSION['user_id']} attempted to access admin dashboard");
-            header('Location: ' . SITE_URL . '/?page=dashboard');
-            exit;
-        }
-        include 'views/admin/dashboard.php';
-        break;
-    default:
-        error_log("Default case triggered for page: $page");
-        include 'views/home.php';
-        break;
+// Create database
+try {
+    $pdo->exec("CREATE DATABASE IF NOT EXISTS " . DB_NAME . " CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+    $pdo->exec("USE " . DB_NAME);
+} catch (PDOException $e) {
+    error_log("Failed to create/use database: " . $e->getMessage());
+    die('Installation failed: Could not create database.');
 }
+
+// Execute schema.sql
+$schemaFile = __DIR__ . '/sql/schema.sql';
+if (!file_exists($schemaFile)) {
+    error_log("Schema file not found: $schemaFile");
+    die('Installation failed: Schema file not found.');
+}
+
+try {
+    $schemaSql = file_get_contents($schemaFile);
+    $pdo->exec($schemaSql);
+    error_log("Database schema applied successfully");
+} catch (PDOException $e) {
+    error_log("Failed to apply schema: " . $e->getMessage());
+    die('Installation failed: Could not apply schema.');
+}
+
+// Insert sample quiz data using Database class
+try {
+    $db = Database::getInstance();
+    $db->exec("
+        INSERT INTO courses (name, description) 
+        VALUES ('General Knowledge', 'A course on various topics')
+        ON DUPLICATE KEY UPDATE name = name;
+
+        INSERT INTO quizzes (course_id, name, attempts_allowed, timer_minutes) 
+        VALUES (1, 'Basic Trivia', 3, 0)
+        ON DUPLICATE KEY UPDATE name = name;
+
+        INSERT INTO questions (quiz_id, text, options, correct_option_index, explanation, score) 
+        VALUES 
+        (1, 'What is the capital of France?', '[\"Paris\", \"London\", \"Berlin\", \"Madrid\"]', 0, 'Paris is the capital city of France.', 5),
+        (1, 'Which planet is known as the Red Planet?', '[\"Jupiter\", \"Mars\", \"Venus\", \"Mercury\"]', 1, 'Mars is called the Red Planet due to its reddish appearance.', 5)
+        ON DUPLICATE KEY UPDATE text = text;
+    ");
+    error_log("Sample quiz data inserted successfully");
+} catch (PDOException $e) {
+    error_log("Failed to insert sample quiz data: " . $e->getMessage());
+    die('Installation failed: Could not insert sample quiz data.');
+}
+
+// Create admin user
+try {
+    $adminPassword = 'admin123';
+    $adminPasswordHash = password_hash($adminPassword, PASSWORD_BCRYPT);
+    $db->exec("
+        INSERT INTO users (username, email, password_hash, full_name, is_active, is_verified, role) 
+        VALUES ('admin', 'admin@quizapp.test', '$adminPasswordHash', 'Admin User', 1, 1, 'admin')
+        ON DUPLICATE KEY UPDATE email = email;
+    ");
+    error_log("Admin user created successfully");
+} catch (PDOException $e) {
+    error_log("Failed to create admin user: " . $e->getMessage());
+    die('Installation failed: Could not create admin user.');
+}
+
+// Optionally delete install.php for security
+if (unlink(__FILE__)) {
+    error_log("install.php deleted successfully");
+} else {
+    error_log("Failed to delete install.php");
+}
+
+// Redirect to homepage
+header('Location: ' . SITE_URL . '/?page=home&message=installed');
+exit;
 ?>

@@ -252,6 +252,11 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
    </header>
 
 <main>
+      <?php if (isset($_GET['message']) && $_GET['message'] === 'installed'): ?>
+         <div class="alert alert-success" role="alert">
+            Installation successful! Admin account created: admin@quizapp.test / admin123
+         </div>
+      <?php endif; ?>
 
       <!-- hero-area-start -->
       <div class="it-hero-3-area theme-bg-2">

@@ -1,4 +1,5 @@
-CREATE DATABASE unistar_quiz CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+-- sql/schema.sql
+CREATE DATABASE IF NOT EXISTS unistar_quiz CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE unistar_quiz;
 
 -- Users table
@@ -21,9 +22,10 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS reset_tokens (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
-    token VARCHAR(64) NOT NULL,
-    expires_at DATETIME NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    token VARCHAR(255) NOT NULL,
+    expires_at TIMESTAMP NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    INDEX idx_token (token)
 );
 
 -- Courses
@@ -86,21 +88,11 @@ CREATE TABLE IF NOT EXISTS payments (
 CREATE TABLE IF NOT EXISTS feature_flags (
     id INT AUTO_INCREMENT PRIMARY KEY,
     flag_name VARCHAR(50) UNIQUE NOT NULL,
-    value TINYINT(1) DEFAULT 0,  -- bool as int
+    value TINYINT(1) DEFAULT 0,
     description TEXT
 );
 
--- Reset Tokens
-CREATE TABLE IF NOT EXISTS reset_tokens (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    token VARCHAR(255) NOT NULL,
-    expires_at TIMESTAMP NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    INDEX idx_token (token)
-);
-
--- Notifications (for logging, but emails sent immediately)
+-- Notifications
 CREATE TABLE IF NOT EXISTS notifications (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
@@ -111,7 +103,7 @@ CREATE TABLE IF NOT EXISTS notifications (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Sessions (for tracking activity, optional)
+-- Sessions
 CREATE TABLE IF NOT EXISTS sessions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -127,6 +119,3 @@ INSERT INTO feature_flags (flag_name, value, description) VALUES
 ('shuffle_options', 1, 'Randomize option order'),
 ('one_page_quiz', 0, 'Show all questions on one page'),
 ('enable_timer', 0, 'Enable quiz timer');
-
--- Default payment amount: Add to settings or hardcode, but use a settings table if expanded.
--- For now, assume ₦5000 in config, admin can update via dashboard (add settings table later if needed).
