@@ -76,5 +76,5 @@ try {
 </div>
 <?php
 $content = ob_get_clean();
-include 'views/layouts/main.php';
+include 'views/layouts/dashboard.php';
 ?>
