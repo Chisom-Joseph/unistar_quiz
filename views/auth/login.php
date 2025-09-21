@@ -34,7 +34,7 @@ try {
                 }
                 $dashboardPage = $_SESSION['role'] === 'admin' ? 'admin_dashboard' : 'dashboard';
                 error_log("Login successful, redirecting user_id: {$_SESSION['user_id']} to $dashboardPage");
-                header('Location: ' . SITE_URL . '/?page=' . $dashboardPage);
+                header('Location: ' . '/?page=' . $dashboardPage);
                 exit;
             } else {
                 $error = "Invalid email or password, or account is not active/verified";
