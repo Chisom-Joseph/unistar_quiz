@@ -184,7 +184,7 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                                <div class="it-header-3-top-right">
                                   <span>
                                      <span class="icon"><i class="fa-solid fa-user"></i></span>
-                                     <a href="<?php echo SITE_URL; ?>/?page=login" class="text">Login</a>/
+                                     <a href="<?php echo SITE_URL; ?>/?page=login" class="text">Login</a>
                                      <a href="<?php echo SITE_URL; ?>/?page=register" class="text">Register</a>
                                   </span>
                                </div>
@@ -322,7 +322,7 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                      </div>
 
                      <div class="it-hero-3-btn-box d-flex align-items-center">
-                     <a class="it-btn-white" href="quiz-categories.html">
+                     <a class="it-btn-white" href="/?page=login">
                         <span>
                            Take a Quiz
                            <svg width="17" height="14" viewBox="0 0 17 14" fill="none"
@@ -439,7 +439,7 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
       <!-- about-area-end -->
 
       <!-- course-area-start -->
-      <div class="it-course-area it-course-style-3 it-course-bg p-relative grey-bg pt-120 pb-120"
+      <!---<div class="it-course-area it-course-style-3 it-course-bg p-relative grey-bg pt-120 pb-120"
          data-background="/public/img/course/course-bg.png">
          <div class="container">
             <div class="it-course-title-wrap mb-60">
@@ -455,7 +455,7 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                   </div>
                   <div class="col-xl-5 col-lg-5 col-md-4">
                      <div class="it-course-button text-start text-md-end pt-25">
-                        <a class="it-btn-theme-2" href="course-2.html">
+                        <a class="it-btn-theme-2" href="#">
                            <span>
                               Load More Course
                               <svg width="17" height="14" viewBox="0 0 17 14" fill="none"
@@ -579,7 +579,7 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                </div>
             </div>
          </div>
-      </div>
+      </div>-->
       <!-- course-area-end -->
 
       <!-- valu-area-start -->
@@ -596,12 +596,11 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                   <div class="it-value-title-box">
                      <span class="it-section-subtitle-3">
                         <img src="/public/img/about/bg.svg" alt="">
-                        Top Popular Course
+                        Top Popular Quiz
                      </span>
-                     <h4 class="it-section-title-3 pb-25">Our Classroom is a very
-                        deferent <span>school</span> than all <br> the others</h4>
-                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod <br> tempor incididunt
-                        ut labore.</p>
+                     <h4 class="it-section-title-3 pb-25">Our <span>Quiz</span> is very
+                        <span> different</span> than all others</h4>
+                     <p>Our quiz are tailored to help you prepare for exams and pass with ease and less stress.</p>
                   </div>
                   <div class="it-progress-bar-wrap">
                      <div class="it-progress-bar-item">
@@ -683,10 +682,10 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                   <div class="it-feature-3-title-box text-center mb-60">
                      <span class="it-section-subtitle-3">
                         <img src="/public/img/about/bg.svg" alt="">
-                        HISTUDY FEATURE
+                        UNISTAR FEATURE
                         <img src="/public/img/about/bg.svg" alt="">
                      </span>
-                     <h4 class="it-section-title-3">Check out educate features <br> win any exam</h4>
+                     <h4 class="it-section-title-3">Check out quiz features <br> win any exam</h4>
                   </div>
                </div>
             </div>
@@ -698,10 +697,10 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                      </div>
                      <div class="it-feature-3-content">
                         <h4 class="it-feature-3-title"><a href="service-details.html">Best Coaching</a></h4>
-                        <p>In pellentesque massa vida placerat duis. Cursus sit amet dictum sit amet.</p>
+                        <p>Get expert-designed study guides and resources that make learning easy, fun, and effective for all exams..</p>
                      </div>
                      <div class="it-feature-3-btn">
-                        <a class="it-btn-theme-sm" href="service-details.html">
+                        <a class="it-btn-theme-sm" href="#">
                            <span>
                               view details
                               <svg width="17" height="14" viewBox="0 0 17 14" fill="none"
@@ -722,11 +721,11 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                         <span><i class="flaticon-study"></i></span>
                      </div>
                      <div class="it-feature-3-content">
-                        <h4 class="it-feature-3-title"><a href="service-details.html">Best Coaching</a></h4>
-                        <p>In pellentesque massa vida placerat duis. Cursus sit amet dictum sit amet.</p>
+                        <h4 class="it-feature-3-title"><a href="service-details.html">Smart Practice</a></h4>
+                        <p>Access a wide range of quizzes and mock tests to sharpen your knowledge and boost your confidence.</p>
                      </div>
                      <div class="it-feature-3-btn">
-                        <a class="it-btn-theme-sm" href="service-details.html">
+                        <a class="it-btn-theme-sm" href="#">
                            <span>
                               view details
                               <svg width="17" height="14" viewBox="0 0 17 14" fill="none"
@@ -747,11 +746,11 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                         <span><i class="flaticon-booking"></i></span>
                      </div>
                      <div class="it-feature-3-content">
-                        <h4 class="it-feature-3-title"><a href="service-details.html">Best Coaching</a></h4>
-                        <p>In pellentesque massa vida placerat duis. Cursus sit amet dictum sit amet.</p>
+                        <h4 class="it-feature-3-title"><a href="service-details.html">Exam Strategies</a></h4>
+                        <p>Learn proven tips, tricks, and strategies to excel in competitive tests and achieve top results.</p>
                      </div>
                      <div class="it-feature-3-btn">
-                        <a class="it-btn-theme-sm" href="service-details.html">
+                        <a class="it-btn-theme-sm" href="#">
                            <span>
                               view details
                               <svg width="17" height="14" viewBox="0 0 17 14" fill="none"
@@ -772,11 +771,11 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                         <span><i class="flaticon-video"></i></span>
                      </div>
                      <div class="it-feature-3-content">
-                        <h4 class="it-feature-3-title"><a href="service-details.html">Best Coaching</a></h4>
-                        <p>In pellentesque massa vida placerat duis. Cursus sit amet dictum sit amet.</p>
+                        <h4 class="it-feature-3-title"><a href="service-details.html">Guaranteed Growth</a></h4>
+                        <p>Track your progress, identify your strengths, and improve faster with personalized learning tools.</p>
                      </div>
                      <div class="it-feature-3-btn">
-                        <a class="it-btn-theme-sm" href="service-details.html">
+                        <a class="it-btn-theme-sm" href="#">
                            <span>
                               view details
                               <svg width="17" height="14" viewBox="0 0 17 14" fill="none"
@@ -822,7 +821,7 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                      <h3 class="it-video-title">Call To Enroll Your Child <br> <a
                            href="tel:+91958423452">(+91)958423452</a></h3>
                      <div class="it-video-button">
-                        <a class="it-btn-theme-2" href="contact.html">
+                        <a class="it-btn-theme-2" href="#">
                            <span>
                               Join With us
                               <svg width="17" height="14" viewBox="0 0 17 14" fill="none"
@@ -880,7 +879,7 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                         <span>Medical Exam</span>
                         <p>Lorem ipsum dolor sit amet, consectetur
                            adipiscing elit sed.</p>
-                        <a class="it-btn-yellow mr-15" href="contact.html">
+                        <a class="it-btn-yellow mr-15" href="#">
                            <span>
                               Join now
                               <svg width="17" height="14" viewBox="0 0 17 14" fill="none"
@@ -907,7 +906,7 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                         <span>BCS Exam</span>
                         <p>Lorem ipsum dolor sit amet, consectetur
                            adipiscing elit sed.</p>
-                        <a class="it-btn-yellow mr-15" href="contact.html">
+                        <a class="it-btn-yellow mr-15" href="#">
                            <span>
                               Join now
                               <svg width="17" height="14" viewBox="0 0 17 14" fill="none"
@@ -957,17 +956,14 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                               <div class="swiper-slide">
                                  <div class="it-testimonial-3-item">
                                     <div class="it-testimonial-3-content">
-                                       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-                                          veniam, quis nostrud exercitation ullamco laboris nisi ut aliquipLorem
-                                          ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                       <p>Unistar is the best exam prep tool I’ve ever used. The study resources and strategies gave me an edge, and I finally achieved the grades I was aiming for.</p>
                                        <div class="it-testimonial-3-author-box d-flex align-items-center">
                                           <div class="it-testimonial-3-avata">
                                              <img src="/public/img/avatar/avatar-3-1.png" alt="">
                                           </div>
                                           <div class="it-testimonial-3-author-info">
-                                             <h5>Jorge Carter</h5>
-                                             <span>Software Developer</span>
+                                             <h5>Emeka Nwankwo</h5>
+                                             <span>Law Student</span>
                                           </div>
                                        </div>
                                     </div>
@@ -976,17 +972,14 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                               <div class="swiper-slide">
                                  <div class="it-testimonial-3-item">
                                     <div class="it-testimonial-3-content">
-                                       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-                                          veniam, quis nostrud exercitation ullamco laboris nisi ut aliquipLorem
-                                          ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                       <p>Unistar made my MBBS exams so much easier. The quizzes helped me practice daily, and I went into my exams with full confidence. I passed with excellent results!</p>
                                        <div class="it-testimonial-3-author-box d-flex align-items-center">
                                           <div class="it-testimonial-3-avata">
                                              <img src="/public/img/avatar/avatar-2.png" alt="">
                                           </div>
                                           <div class="it-testimonial-3-author-info">
-                                             <h5>Jorge Carter</h5>
-                                             <span>Gloria Burnett</span>
+                                             <h5>Chiamaka Okafor</h5>
+                                             <span>Medical Student</span>
                                           </div>
                                        </div>
                                     </div>
@@ -995,17 +988,14 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                               <div class="swiper-slide">
                                  <div class="it-testimonial-3-item">
                                     <div class="it-testimonial-3-content">
-                                       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-                                          veniam, quis nostrud exercitation ullamco laboris nisi ut aliquipLorem
-                                          ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                       <p>Before Unistar, I struggled with time management in tests. The mock exams helped me master speed and accuracy. Now, I feel more prepared than ever</p>
                                        <div class="it-testimonial-3-author-box d-flex align-items-center">
                                           <div class="it-testimonial-3-avata">
                                              <img src="/public/img/avatar/avatar-1.png" alt="">
                                           </div>
                                           <div class="it-testimonial-3-author-info">
-                                             <h5>Laurie Duncanr</h5>
-                                             <span>Software Developer</span>
+                                             <h5>Tunde Adebayo</h5>
+                                             <span>Computer Science Student</span>
                                           </div>
                                        </div>
                                     </div>
@@ -1045,18 +1035,13 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                            <img src="/public/img/about/bg.svg" alt="">
                            explore Events
                         </span>
-                        <h2 class="it-section-title-3 pb-20">our best upcoming events</h2>
+                        <h2 class="it-section-title-3 pb-20">our upcoming quiz competition events</h2>
                      </div>
                      <div class="it-event-content">
-                        <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod <br>
-                           tempor incididunt ut labore.</span>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                           incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                           nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                           Duis aute irure dolor in reprehenderit in voluptate</p>
-                        <a class="it-btn-theme-2" href="contact.html">
-                           <span>
-                              admission open
+                        <span>Dont miss any quiz competition.</span>
+                        <p>Get ready to test your knowledge, challenge your peers, and win exciting prizes! At Unistar, we organize interactive quiz competitions designed to sharpen your skills, boost confidence, and make learning fun. Whether you’re preparing for school exams, professional tests, or just love a good challenge, our events are the perfect opportunity to showcase your brilliance and grow.</p>
+                        <a class="it-btn-theme-2" href="/?page=register">
+                           <span>Register Now
                               <svg width="17" height="14" viewBox="0 0 17 14" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
                                  <path d="M11 1.24023L16 7.24023L11 13.2402" stroke="currentcolor" stroke-width="1.5"
@@ -1088,7 +1073,7 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
       <!-- event-area-end -->
 
       <!-- team-area-start -->
-      <div class="it-team-3-area p-relative z-index pt-110 pb-90">
+      <!---<div class="it-team-3-area p-relative z-index pt-110 pb-90">
          <div class="it-team-3-bg" data-background="/public/img/team/bg-3.png"></div>
          <div class="container">
             <div class="row">
@@ -1202,11 +1187,11 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                </div>
             </div>
          </div>
-      </div>
+      </div>--->
       <!-- team-area-end -->
 
       <!-- blog-area-start -->
-      <div class="it-blog-area it-blog-color pb-90">
+      <!---- <div class="it-blog-area it-blog-color pb-90">
          <div class="container">
             <div class="it-blog-title-wrap mb-80">
                <div class="row align-items-end">
@@ -1333,7 +1318,7 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                </div>
             </div>
          </div>
-      </div>
+      </div>-->
       <!-- blog-area-end -->
 
 
@@ -1349,7 +1334,7 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                         <a href="/"><img src="/public/img/logo/logo-yellow.png" alt=""></a>
                      </div>
                      <div class="it-footer-text pb-5">
-                        <p>Interdum velit laoreet id donec ultrices <br> tincidunt arcu. Tincidunt tortor aliquam nulla facilisi cras fermentum odio eu.</p>
+                        <p>Unistar – Your trusted companion for quizzes, tests, and exam success.  </p>
                      </div>
                      <div class="it-footer-social">
                         <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
@@ -1364,11 +1349,8 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                      <h4 class="it-footer-title">our services:</h4>
                      <div class="it-footer-list">
                         <ul>
-                           <li><a href="#"><i class="fa-regular fa-angle-right"></i>Web development</a></li>
-                           <li><a href="#"><i class="fa-regular fa-angle-right"></i>UI/UX Design</a></li>
-                           <li><a href="#"><i class="fa-regular fa-angle-right"></i>Management</a></li>
-                           <li><a href="#"><i class="fa-regular fa-angle-right"></i>Digital Marketing</a></li>
-                           <li><a href="#"><i class="fa-regular fa-angle-right"></i>Blog News</a></li>
+                           <li><a href="#"><i class="fa-regular fa-angle-right"></i>Quiz</a></li>
+                           <li><a href="#"><i class="fa-regular fa-angle-right"></i>Exam Preparations</a></li>
                         </ul>
                      </div>
                   </div>
@@ -1378,10 +1360,10 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                      <h4 class="it-footer-title">quick links:</h4>
                      <div class="it-footer-list">
                         <ul>
-                           <li><a href="#"><i class="fa-regular fa-angle-right"></i>templates</a></li>
-                           <li><a href="#"><i class="fa-regular fa-angle-right"></i>blog and article</a></li>
-                           <li><a href="#"><i class="fa-regular fa-angle-right"></i>integrations</a></li>
-                           <li><a href="#"><i class="fa-regular fa-angle-right"></i>webinars</a></li>
+                           <li><a href="/?page=login"><i class="fa-regular fa-angle-right"></i>Login</a></li>
+                           <li><a href="/?page=register"><i class="fa-regular fa-angle-right"></i>Register</a></li>
+                           <li><a href="#"><i class="fa-regular fa-angle-right"></i>About Us</a></li>
+                           <li><a href="#"><i class="fa-regular fa-angle-right"></i>Contact Us</a></li>
                            <li><a href="#"><i class="fa-regular fa-angle-right"></i>privacy & policy</a></li>
                         </ul>
                      </div>
@@ -1437,7 +1419,7 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
             <div class="row">
                <div class="col-12 wow itfadeUp" data-wow-duration=".9s" data-wow-delay=".3s">
                   <div class="it-copyright-text text-center">
-                     <p>Copyright © 2023  <a href="#">Educate </a> || All Rights Reserved</p>
+                     <p>Copyright © Unistar 2025 || Designed & Developed By <a href="https://wa.me/2348072703028">Smikedigital </a></p>
                   </div>
                </div>
             </div>
