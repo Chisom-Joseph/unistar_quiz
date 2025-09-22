@@ -695,6 +695,17 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
 							<i class="fa fa-caret-down ms-3 me-2 " aria-hidden="true"></i>
 						</a>
 						<div class="dropdown-menu dropdown-menu-end">
+							<?php if ($isAdmin): ?>
+								<a href="/?page=admin_dashboard" class="dropdown-item ai-icon">
+									<svg id="icon-dashboard" xmlns="http://www.w3.org/2000/svg" 
+										class="text-primary" width="18" height="18" 
+										viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+										stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+										<path d="M3 13h8V3H3v10zM3 21h8v-6H3v6zM13 21h8V11h-8v10zM13 3v6h8V3h-8z"></path>
+									</svg>
+									<span class="ms-2">Dashboard</span>
+								</a>
+							<?php endif; ?>
 							<a href="/?page=profile" class="dropdown-item ai-icon">
 								<svg id="icon-user1" xmlns="http://www.w3.org/2000/svg" class="text-primary" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
 								<span class="ms-2">Profile </span>
