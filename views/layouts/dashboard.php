@@ -791,7 +791,7 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
 <div class="footer">
 
     <div class="copyright">
-        <p>Copyright © Designed &amp; Developed by <a href="https://dexignzone.com/" target="_blank">DexignZone</a> 2023</p>
+        <p>Copyright © Unistar 2025 || Designed & Developed By <a href="https://wa.me/2348072703028">Smikedigital</p>
     </div>
 </div>
 <!--**********************************
