@@ -154,7 +154,7 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                                  <span>
                                     <span class="icon"><i class="fab fa-solid fa-user"></i></span>
                                     <a href="<?php echo htmlspecialchars($userData['role']) == "admin" ? "/?page=admin_dashboard" : "?page=dashboard"; ?>" class="text">Dashboard</a>/
-                                    <a href="<?php echo SITE_URL; ?>/?page=logout" class="text">Logout</a>
+                                    <a href="/?page=logout" class="text">Logout</a>
                                  </span>
                               </div>
                            </li>
@@ -163,9 +163,9 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                                <div class="it-header-3-top-right">
                                   <span class="it-header-2-top-social">
                                      <a class="icon"><i class="fab fa-solid fa-user"></i></a>
-                                     <a href="<?php echo SITE_URL; ?>/?page=login" class="text">Login</a>
+                                     <a href="/?page=login" class="text">Login</a>
                                      <a>/</a>
-                                     <a href="<?php echo SITE_URL; ?>/?page=register" class="text">Register</a>
+                                     <a href="/?page=register" class="text">Register</a>
                                   </span>
                                </div>
                             </li>
@@ -202,8 +202,10 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                            <nav class="it-menu-content">
                               <ul>
                                  <li><a href="/">Home</a></li>
-                                 <li><a href="about-us.html">about us</a></li>
+                                 <li><a href="/?page=about">about us</a></li>
                                  <li><a href="contact.html">contact</a></li>
+                                 <li><a href="/?page=register">Register</a></li>
+                                 <li><a href="/?page=login">Login</a></li>
                               </ul>
                            </nav>
                         </div>

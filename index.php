@@ -21,7 +21,7 @@ if (!isset($_SESSION['csrf_token'])) {
 
 try {
     // Allow public access to 'home', 'login', 'register', 'verify', 'forgot_password', 'reset_password'
-    if (!$user->isLoggedIn() && !in_array($page, ['home', 'login', 'register', 'verify', 'forgot_password', 'reset_password'])) {
+    if (!$user->isLoggedIn() && !in_array($page, ['home', 'about', 'login', 'register', 'verify', 'forgot_password', 'reset_password'])) {
         error_log("Unauthenticated access to page=$page, redirecting to login");
         header('Location: ' . SITE_URL . '/?page=login&error=not_logged_in');
         exit;
@@ -30,6 +30,9 @@ try {
     switch ($page) {
         case 'home':
             include 'views/home.php';
+            break;
+        case 'about':
+            include 'views/about.php';
             break;
         case 'login':
             include 'views/auth/login.php';
