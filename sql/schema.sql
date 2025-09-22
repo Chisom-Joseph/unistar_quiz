@@ -1,8 +1,4 @@
--- sql/schema.sql
-CREATE DATABASE IF NOT EXISTS unistar_quiz CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE unistar_quiz;
-
--- Users table (no FKs)
+-- Users table
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
@@ -24,6 +20,7 @@ CREATE TABLE IF NOT EXISTS reset_tokens (
     user_id INT NOT NULL,
     token VARCHAR(255) NOT NULL,
     expires_at TIMESTAMP NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     INDEX idx_token (token)
 );
 
@@ -42,10 +39,11 @@ CREATE TABLE IF NOT EXISTS quizzes (
     name VARCHAR(100) NOT NULL,
     attempts_allowed INT DEFAULT 3,
     timer_minutes INT DEFAULT 0,
+    FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Questions
+-- Questions (options as JSON: ["opt1", "opt2", ...])
 CREATE TABLE IF NOT EXISTS questions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     quiz_id INT NOT NULL,
@@ -53,10 +51,11 @@ CREATE TABLE IF NOT EXISTS questions (
     options JSON NOT NULL,
     correct_option_index INT NOT NULL,
     score INT DEFAULT 1,
-    explanation TEXT
+    explanation TEXT,
+    FOREIGN KEY (quiz_id) REFERENCES quizzes(id) ON DELETE CASCADE
 );
 
--- Attempts
+-- Attempts (answers as JSON: {"q1_id": 0, "q2_id": 1, ...})
 CREATE TABLE IF NOT EXISTS attempts (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -65,6 +64,8 @@ CREATE TABLE IF NOT EXISTS attempts (
     end_time TIMESTAMP NULL,
     score INT DEFAULT 0,
     answers JSON,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (quiz_id) REFERENCES quizzes(id) ON DELETE CASCADE,
     INDEX idx_user_quiz (user_id, quiz_id)
 );
 
@@ -75,7 +76,8 @@ CREATE TABLE IF NOT EXISTS payments (
     amount DECIMAL(10,2) NOT NULL,
     status ENUM('pending', 'success', 'failed') DEFAULT 'pending',
     transaction_id VARCHAR(100),
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 -- Feature Flags
@@ -93,7 +95,8 @@ CREATE TABLE IF NOT EXISTS notifications (
     type VARCHAR(50) NOT NULL,
     content TEXT,
     sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status ENUM('sent', 'failed') DEFAULT 'sent'
+    status ENUM('sent', 'failed') DEFAULT 'sent',
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 -- Sessions
@@ -102,13 +105,23 @@ CREATE TABLE IF NOT EXISTS sessions (
     user_id INT NOT NULL,
     session_id VARCHAR(255) NOT NULL,
     last_activity TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     INDEX idx_session (session_id)
 );
 
 -- Insert default flags
-INSERT INTO feature_flags (flag_name, value, description) VALUES
-('shuffle_questions', 1, 'Randomize question order'),
-('shuffle_options', 1, 'Randomize option order'),
-('one_page_quiz', 0, 'Show all questions on one page'),
-('enable_timer', 0, 'Enable quiz timer')
-ON DUPLICATE KEY UPDATE value = value;
+INSERT INTO feature_flags (flag_name, value, description) 
+VALUES ('shuffle_questions', 1, 'Randomize question order') 
+ON DUPLICATE KEY UPDATE value = VALUES(value), description = VALUES(description);
+
+INSERT INTO feature_flags (flag_name, value, description) 
+VALUES ('shuffle_options', 1, 'Randomize option order') 
+ON DUPLICATE KEY UPDATE value = VALUES(value), description = VALUES(description);
+
+INSERT INTO feature_flags (flag_name, value, description) 
+VALUES ('one_page_quiz', 0, 'Show all questions on one page') 
+ON DUPLICATE KEY UPDATE value = VALUES(value), description = VALUES(description);
+
+INSERT INTO feature_flags (flag_name, value, description) 
+VALUES ('enable_timer', 0, 'Enable quiz timer') 
+ON DUPLICATE KEY UPDATE value = VALUES(value), description = VALUES(description);
