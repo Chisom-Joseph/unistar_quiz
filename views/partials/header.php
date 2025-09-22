@@ -129,8 +129,10 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                                  <li><a href="/">Home</a></li>
                                  <li><a href="/?page=about">about us</a></li>
                                  <li><a href="/?page=contact">contact</a></li>
-                                 <li><a href="/?page=register">Register</a></li>
-                                 <li><a href="/?page=login">Login</a></li>
+                                 <?php if (!$isLoggedIn): ?>
+                                    <li><a href="/?page=register">Register</a></li>
+                                    <li><a href="/?page=login">Login</a></li>
+                                <?php endif; ?>
                               </ul>
                            </nav>
                         </div>
@@ -138,6 +140,50 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                      <div class="col-xl-3 col-6">
                         <div class="it-header-2-right d-flex align-items-center justify-content-end">
                            <div class="it-header-2-button d-none d-md-block">
+                            <?php if ($isLoggedIn && $userData): ?>
+                                <div class="nav-item dropdown header-profile">
+                                    <a class="nav-link d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                                        <!-- Profile Image -->
+                                        <img src="<?php echo SITE_URL . "/public/uploads/" . htmlspecialchars($userData['profile_pic']); ?>" 
+                                            width="40" height="40" 
+                                            alt="Profile" 
+                                            class="rounded-circle me-2" 
+                                            style="object-fit:cover;">
+
+                                        <!-- Name & Role -->
+                                        <div class="">
+                                            <span class="fw-semibold p-0"><?php echo htmlspecialchars($userData['full_name']); ?></span>
+                                        </div>
+
+                                        <!-- Caret Icon -->
+                                        <i class="fa fa-caret-down ms-2" aria-hidden="true"></i>
+                                    </a>
+
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <a href="/?page=profile" class="dropdown-item ai-icon">
+                                            <svg id="icon-user1" xmlns="http://www.w3.org/2000/svg" 
+                                                class="text-primary" width="18" height="18" 
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                                <circle cx="12" cy="7" r="4"></circle>
+                                            </svg>
+                                            <span class="ms-2">Profile</span>
+                                        </a>
+                                        <a href="/?page=logout" class="dropdown-item ai-icon">
+                                            <svg id="icon-logout" xmlns="http://www.w3.org/2000/svg" 
+                                                class="text-danger" width="18" height="18" 
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                                <polyline points="16 17 21 12 16 7"></polyline>
+                                                <line x1="21" y1="12" x2="9" y2="12"></line>
+                                            </svg>
+                                            <span class="ms-2">Logout</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            <?php else: ?>
                               <a class="it-btn" href="/?page=contact">
                                  <span>
                                     Contact Us
@@ -151,6 +197,7 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                                     </svg>
                                  </span>
                               </a>
+                            <?php endif; ?>
                            </div>
                            <div class="it-header-2-bar d-xl-none">
                               <button class="it-menu-bar"><i class="fa-solid fa-bars"></i></button>
