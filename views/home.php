@@ -222,8 +222,10 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                               <nav class="it-menu-content">
                                  <ul>
                                     <li><a href="/">Home</a></li>
-                                    <li><a href="about-us.html">about us</a></li>
-                                    <li><a href="contact.html">contact</a></li>
+                                    <li><a href="/?page=about">about us</a></li>
+                                    <li><a href="/?page=contact">contact</a></li>
+                                    <li><a href="/?page=register">Register</a></li>
+                                    <li><a href="/?page=login">Login</a></li>
                                  </ul>
                               </nav>
                            </div>
