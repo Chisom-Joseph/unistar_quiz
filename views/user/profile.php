@@ -75,55 +75,59 @@ try {
                 </div>
             </div>
         </div>
+
         <div class="col-md-8">
-            <div class="card shadow-sm mb-4">
-                <div class="card-body">
-                    <h5 class="card-title">Update Profile</h5>
-                    <form method="POST" action="?page=profile" enctype="multipart/form-data">
-                        <input type="hidden" name="csrf" value="<?php echo htmlspecialchars($_SESSION['csrf_token'] ?? ''); ?>">
-                        <input type="hidden" name="update_profile" value="1">
-                        <div class="mb-3">
-                            <label for="username" class="form-label">Username</label>
-                            <input type="text" class="form-control" name="username" id="username" value="<?php echo htmlspecialchars($userData['username']); ?>" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" name="email" id="email" value="<?php echo htmlspecialchars($userData['email']); ?>" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="full_name" class="form-label">Full Name</label>
-                            <input type="text" class="form-control" name="full_name" id="full_name" value="<?php echo htmlspecialchars($userData['full_name']); ?>" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="profile_pic" class="form-label">Profile Picture</label>
-                            <input type="file" class="form-control" name="profile_pic" id="profile_pic" accept="image/jpeg,image/png,image/gif">
-                            <small class="form-text text-muted">Max 2MB, JPEG/PNG/GIF only</small>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Update Profile</button>
-                    </form>
+            <div>
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Update Profile</h5>
+                        <form method="POST" action="?page=profile" enctype="multipart/form-data">
+                            <input type="hidden" name="csrf" value="<?php echo htmlspecialchars($_SESSION['csrf_token'] ?? ''); ?>">
+                            <input type="hidden" name="update_profile" value="1">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" name="username" id="username" value="<?php echo htmlspecialchars($userData['username']); ?>" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" name="email" id="email" value="<?php echo htmlspecialchars($userData['email']); ?>" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="full_name" class="form-label">Full Name</label>
+                                <input type="text" class="form-control" name="full_name" id="full_name" value="<?php echo htmlspecialchars($userData['full_name']); ?>" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="profile_pic" class="form-label">Profile Picture</label>
+                                <input type="file" class="form-control" name="profile_pic" id="profile_pic" accept="image/jpeg,image/png,image/gif">
+                                <small class="form-text text-muted">Max 2MB, JPEG/PNG/GIF only</small>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Update Profile</button>
+                        </form>
+                    </div>
                 </div>
-            </div>
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Change Password</h5>
-                    <form method="POST" action="?page=profile">
-                        <input type="hidden" name="csrf" value="<?php echo htmlspecialchars($_SESSION['csrf_token'] ?? ''); ?>">
-                        <input type="hidden" name="change_password" value="1">
-                        <div class="mb-3">
-                            <label for="current_password" class="form-label">Current Password</label>
-                            <input type="password" class="form-control" name="current_password" id="current_password" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="new_password" class="form-label">New Password</label>
-                            <input type="password" class="form-control" name="new_password" id="new_password" required>
-                            <small class="form-text text-muted">Minimum 8 characters</small>
-                        </div>
-                        <div class="mb-3">
-                            <label for="confirm_password" class="form-label">Confirm New Password</label>
-                            <input type="password" class="form-control" name="confirm_password" id="confirm_password" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Change Password</button>
-                    </form>
+                
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Change Password</h5>
+                        <form method="POST" action="?page=profile">
+                            <input type="hidden" name="csrf" value="<?php echo htmlspecialchars($_SESSION['csrf_token'] ?? ''); ?>">
+                            <input type="hidden" name="change_password" value="1">
+                            <div class="mb-3">
+                                <label for="current_password" class="form-label">Current Password</label>
+                                <input type="password" class="form-control" name="current_password" id="current_password" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="new_password" class="form-label">New Password</label>
+                                <input type="password" class="form-control" name="new_password" id="new_password" required>
+                                <small class="form-text text-muted">Minimum 8 characters</small>
+                            </div>
+                            <div class="mb-3">
+                                <label for="confirm_password" class="form-label">Confirm New Password</label>
+                                <input type="password" class="form-control" name="confirm_password" id="confirm_password" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Change Password</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
