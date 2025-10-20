@@ -1,6 +1,6 @@
 -- sql/schema.sql
-CREATE DATABASE IF NOT EXISTS unistar_quiz CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE unistar_quiz;
+CREATE DATABASE IF NOT EXISTS unistar CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE unistar;
 
 -- Users table
 CREATE TABLE IF NOT EXISTS users (

@@ -283,16 +283,15 @@ ob_start();
                   <div class="it-course-title-box text-center mb-70">
                      <span class="it-section-subtitle">
                         <img src="/public/img/category/inner.svg" alt="">
-                        Top Popular Course
+                        Top sponsors
                         <img src="/public/img/category/inner.svg" alt="">
                      </span>
-                     <h4 class="it-section-title">Histudy Course 
-                        <span class="p-relative z-index">student
+                     <h4 class="it-section-title"> 
+                        <span class="p-relative z-index">Sponsors
                            <svg class="title-shape-2" width="168" height="65" viewBox="0 0 168 65" fill="none" xmlns="http://www.w3.org/2000/svg">
                               <path d="M73.3761 8.49147C78.4841 6.01353 82.5722 4.25154 88.8933 3.3035C94.2064 2.50664 99.6305 2.0701 104.981 1.94026C120.426 1.56549 135.132 4.90121 146.506 9.70405C158.628 14.8228 166.725 22.5638 166.074 31.6501C165.291 42.5779 151.346 51.7039 133.508 56.8189C110.253 63.4874 81.7065 63.8025 58.5605 60.8285C37.5033 58.123 11.6304 51.7165 3.58132 40.0216C-3.43085 29.8337 12.0728 18.1578 27.544 11.645C40.3656 6.24763 55.7082 2.98328 70.8043 4.08403C81.9391 4.89596 93.2164 6.87822 102.462 9.99561C112.874 13.5066 120.141 18.5932 127.862 23.6332" stroke="#0AB99D" stroke-width="3" stroke-linecap="round"/>
                            </svg>
                         </span>
-                        can <br> join with us.
                      </h4>
                   </div>
                </div>
@@ -426,10 +425,10 @@ ob_start();
                   <div class="it-event-title-box text-center pb-40">
                      <span class="it-section-subtitle text-white">
                         <img src="/public/img/team/bok.svg" alt="">
-                        Teacher
+                        Coordinators
                         <img src="/public/img/team/bok.svg" alt="">
                      </span>
-                     <h2 class="it-section-title-3 text-white">meet our expert Instructor</h2>
+                     <h2 class="it-section-title-3 text-white">Unistar Coordinators</h2>
                   </div>
                </div>
             </div>
@@ -452,8 +451,8 @@ ob_start();
                            </div>
                         </div>
                         <div class="it-team-3-author-box">
-                           <h4 class="it-team-3-title"><a href="teacher-details.html">Nathan Allen</a></h4>
-                           <span>Teacher</span>
+                           <h4 class="it-team-3-title"><a href="teacher-details.html">North</a></h4>
+                           <span>Coordinator</span>
                         </div>
                      </div>
                   </div>
@@ -476,8 +475,8 @@ ob_start();
                            </div>
                         </div>
                         <div class="it-team-3-author-box">
-                           <h4 class="it-team-3-title"><a href="teacher-details.html">Esther Boyd</a></h4>
-                           <span>Teacher</span>
+                           <h4 class="it-team-3-title"><a href="teacher-details.html">South</a></h4>
+                           <span>Coordinator</span>
                         </div>
                      </div>
                   </div>
@@ -500,8 +499,8 @@ ob_start();
                            </div>
                         </div>
                         <div class="it-team-3-author-box">
-                           <h4 class="it-team-3-title"><a href="teacher-details.html">Jamie Keller</a></h4>
-                           <span>Teacher</span>
+                           <h4 class="it-team-3-title"><a href="teacher-details.html">West</a></h4>
+                           <span>Coordinator</span>
                         </div>
                      </div>
                   </div>
@@ -524,8 +523,8 @@ ob_start();
                            </div>
                         </div>
                         <div class="it-team-3-author-box">
-                           <h4 class="it-team-3-title"><a href="teacher-details.html">Jesus Pendley</a></h4>
-                           <span>Teacher</span>
+                           <h4 class="it-team-3-title"><a href="teacher-details.html">East</a></h4>
+                           <span>Coordinator</span>
                         </div>
                      </div>
                   </div>
@@ -535,38 +534,7 @@ ob_start();
       </div>
       <!-- team-area-end -->
 
-      <!-- newsletter-area-start -->
-      <div class="it-newsletter-area it-newsletter-height fix p-relative theme-bg">
-         <div class="it-newsletter-shape-1 d-none d-lg-block">
-            <img src="/public/img/newsletter/shape-1-1.png" alt="">
-         </div>
-         <div class="it-newsletter-shape-2 d-none d-lg-block">
-            <img src="/public/img/newsletter/shape-1-2.png" alt="">
-         </div>
-         <div class="it-newsletter-shape-3 d-none d-xl-block">
-            <img src="/public/img/newsletter/shape-1-3.png" alt="">
-         </div>
-         <div class="it-newsletter-shape-4 d-none d-xl-block">
-            <img src="/public/img/newsletter/shape-1-4.png" alt="">
-         </div>
-         <div class="container">
-            <div class="row">
-               <div class="col-xl-6 col-lg-6 col-md-6">
-                  <div class="it-newsletter-left">
-                     <h4 class="it-section-title text-white pb-20">Join Our Newsletter</h4>
-                     <span>Subscribe our newsletter to get our latest update & news.</span>
-                  </div>
-               </div>
-               <div class="col-xl-6 col-lg-6 col-md-6">
-                  <div class="it-newsletter-right p-relative text-end">
-                     <input type="text" placeholder="Enter your email:">
-                     <button class="it-btn black-bg" type="submit"><span>subscribe now</span></button>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </div>
-      <!-- newsletter-area-end -->   
+
 
    </main>
 <?php

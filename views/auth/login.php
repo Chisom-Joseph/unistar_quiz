@@ -11,7 +11,7 @@ $success = '';
 
 try {
     if ($user->isLoggedIn()) {
-        $dashboardPage = $_SESSION['role'] === 'admin' ? 'admin_dashboard' : 'dashboard';
+        $dashboardPage = isset($_SESSION['role']) && $_SESSION['role'] === 'admin' ? 'admin_dashboard' : 'dashboard';
         error_log("Redirecting logged-in user_id: {$_SESSION['user_id']} from login to $dashboardPage");
         header('Location: ' . SITE_URL . '/?page=' . $dashboardPage);
         exit;
@@ -27,17 +27,16 @@ try {
             if (empty($email) || empty($password)) {
                 throw new Exception("Email and password are required");
             }
-            if ($user->login($email, $password)) {
-                // Optional: Handle "Remember me" (e.g., set cookie, not implemented here)
+            $userId = $user->login($email, $password);
+            if ($userId) {
                 if ($remember_me) {
+                    // Optional: Implement "Remember me" with secure cookies
                     error_log("Remember me checked for email: $email (not implemented)");
                 }
-                $dashboardPage = $_SESSION['role'] === 'admin' ? 'admin_dashboard' : 'dashboard';
-                error_log("Login successful, redirecting user_id: {$_SESSION['user_id']} to $dashboardPage");
-                header('Location: ' . '/?page=' . $dashboardPage);
+                $dashboardPage = isset($_SESSION['role']) && $_SESSION['role'] === 'admin' ? 'admin_dashboard' : 'dashboard';
+                error_log("Login successful, redirecting user_id: $userId to $dashboardPage");
+                header('Location: ' . SITE_URL . '/?page=' . $dashboardPage);
                 exit;
-            } else {
-                $error = "Invalid email or password, or account is not active/verified";
             }
         } catch (Exception $e) {
             error_log("Login error: " . $e->getMessage());
@@ -51,7 +50,6 @@ try {
 error_log("Loading login page, error=" . ($_GET['error'] ?? 'none') . ", session_id=" . session_id());
 ?>
 <main>
-    <!-- signup-area-start -->
     <div class="it-signup-area pt-120 pb-120">
         <div class="container">
             <div class="it-signup-bg p-relative">
@@ -106,7 +104,6 @@ error_log("Loading login page, error=" . ($_GET['error'] ?? 'none') . ", session
             </div>
         </div>
     </div>
-    <!-- signup-area-end -->
 </main>
 <?php
 $content = ob_get_clean();

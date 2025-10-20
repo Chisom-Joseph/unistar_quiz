@@ -1,4 +1,26 @@
--- Users table
+-- Schools
+CREATE TABLE IF NOT EXISTS schools (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+);
+
+-- Faculties
+CREATE TABLE IF NOT EXISTS faculties (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    school_id INT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    FOREIGN KEY (school_id) REFERENCES schools(id) ON DELETE CASCADE
+);
+
+-- Departments
+CREATE TABLE IF NOT EXISTS departments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    faculty_id INT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    FOREIGN KEY (faculty_id) REFERENCES faculties(id) ON DELETE CASCADE
+);
+
+-- Users
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
@@ -9,7 +31,14 @@ CREATE TABLE IF NOT EXISTS users (
     is_active TINYINT(1) DEFAULT 0,
     is_verified TINYINT(1) DEFAULT 0,
     role ENUM('user', 'admin') DEFAULT 'user',
+    school_id INT NOT NULL,
+    faculty_id INT NOT NULL,
+    department_id INT NOT NULL,
+    level VARCHAR(10) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (school_id) REFERENCES schools(id) ON DELETE RESTRICT,
+    FOREIGN KEY (faculty_id) REFERENCES faculties(id) ON DELETE RESTRICT,
+    FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE RESTRICT,
     INDEX idx_email (email),
     INDEX idx_username (username)
 );
@@ -43,7 +72,7 @@ CREATE TABLE IF NOT EXISTS quizzes (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Questions (options as JSON: ["opt1", "opt2", ...])
+-- Questions
 CREATE TABLE IF NOT EXISTS questions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     quiz_id INT NOT NULL,
@@ -55,7 +84,7 @@ CREATE TABLE IF NOT EXISTS questions (
     FOREIGN KEY (quiz_id) REFERENCES quizzes(id) ON DELETE CASCADE
 );
 
--- Attempts (answers as JSON: {"q1_id": 0, "q2_id": 1, ...})
+-- Attempts
 CREATE TABLE IF NOT EXISTS attempts (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -125,3 +154,8 @@ ON DUPLICATE KEY UPDATE value = VALUES(value), description = VALUES(description)
 INSERT INTO feature_flags (flag_name, value, description) 
 VALUES ('enable_timer', 0, 'Enable quiz timer') 
 ON DUPLICATE KEY UPDATE value = VALUES(value), description = VALUES(description);
+
+-- Insert sample data for schools, faculties, departments
+INSERT INTO schools (name) VALUES ('Unistar University');
+INSERT INTO faculties (school_id, name) VALUES (1, 'Faculty of Science');
+INSERT INTO departments (faculty_id, name) VALUES (1, 'Computer Science');

@@ -15,9 +15,37 @@ class User {
         return isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
     }
 
+    public function getSchools() {
+        $stmt = $this->pdo->query("SELECT id, name FROM schools ORDER BY name");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getAllFaculties() {
+        $stmt = $this->pdo->query("SELECT id, school_id, name FROM faculties ORDER BY name");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getFaculties($schoolId) {
+        $stmt = $this->pdo->prepare("SELECT id, name FROM faculties WHERE school_id = ? ORDER BY name");
+        $stmt->execute([$schoolId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getAllDepartments() {
+        $stmt = $this->pdo->query("SELECT id, faculty_id, name FROM departments ORDER BY name");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getDepartments($facultyId) {
+        $stmt = $this->pdo->prepare("SELECT id, name FROM departments WHERE faculty_id = ? ORDER BY name");
+        $stmt->execute([$facultyId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function register($data) {
         // Validate input
-        if (!isset($data['username']) || !isset($data['email']) || !isset($data['password']) || !isset($data['full_name'])) {
+        if (!isset($data['username']) || !isset($data['email']) || !isset($data['password']) || !isset($data['full_name']) ||
+            !isset($data['school_id']) || !isset($data['faculty_id']) || !isset($data['department_id']) || !isset($data['level'])) {
             throw new Exception('All required fields must be filled');
         }
         if (!isset($data['confirm_password']) || $data['password'] !== $data['confirm_password']) {
@@ -29,12 +57,31 @@ class User {
         if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
             throw new Exception('Invalid email format');
         }
+        if (!in_array($data['level'], ['100', '200', '300', '400', '500'])) {
+            throw new Exception('Invalid level selected');
+        }
 
         // Check email/username uniqueness
         $stmt = Database::query("SELECT COUNT(*) FROM users WHERE email = ? OR username = ?", 
             [$data['email'], $data['username']]);
         if ($stmt->fetchColumn() > 0) {
             throw new Exception('Email or username already exists');
+        }
+
+        // Validate school, faculty, department
+        $stmt = Database::query("SELECT COUNT(*) FROM schools WHERE id = ?", [$data['school_id']]);
+        if ($stmt->fetchColumn() == 0) {
+            throw new Exception('Invalid school selected');
+        }
+        $stmt = Database::query("SELECT COUNT(*) FROM faculties WHERE id = ? AND school_id = ?", 
+            [$data['faculty_id'], $data['school_id']]);
+        if ($stmt->fetchColumn() == 0) {
+            throw new Exception('Invalid faculty selected');
+        }
+        $stmt = Database::query("SELECT COUNT(*) FROM departments WHERE id = ? AND faculty_id = ?", 
+            [$data['department_id'], $data['faculty_id']]);
+        if ($stmt->fetchColumn() == 0) {
+            throw new Exception('Invalid department selected');
         }
 
         // Handle profile picture
@@ -87,9 +134,10 @@ class User {
             $this->pdo->beginTransaction();
 
             // Insert user
-            Database::query("INSERT INTO users (username, email, password_hash, full_name, profile_pic, role) 
-                VALUES (?, ?, ?, ?, ?, ?)", 
-                [$data['username'], $data['email'], $password_hash, $data['full_name'], $profilePic, 'user']);
+            Database::query("INSERT INTO users (username, email, password_hash, full_name, profile_pic, role, school_id, faculty_id, department_id, level) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+                [$data['username'], $data['email'], $password_hash, $data['full_name'], $profilePic, 'user', 
+                 $data['school_id'], $data['faculty_id'], $data['department_id'], $data['level']]);
             $userId = $this->pdo->lastInsertId();
             if (!$userId) {
                 $this->pdo->rollBack();
@@ -122,7 +170,7 @@ class User {
         if (empty($email) || empty($password)) {
             throw new Exception('Email and password are required');
         }
-        $stmt = Database::query("SELECT id, password_hash, is_active, is_verified FROM users WHERE email = ?", [$email]);
+        $stmt = Database::query("SELECT id, password_hash, is_active, is_verified, role FROM users WHERE email = ?", [$email]);
         $user = $stmt->fetch();
         if (!$user) {
             throw new Exception('Invalid email or password');
@@ -137,7 +185,8 @@ class User {
             throw new Exception('Account not verified');
         }
         $_SESSION['user_id'] = $user['id'];
-        error_log("User logged in: user_id=" . $user['id'] . ", email=$email");
+        $_SESSION['role'] = $user['role'];
+        error_log("User logged in: user_id=" . $user['id'] . ", email=$email, role=" . $user['role']);
         return $user['id'];
     }
 
@@ -160,13 +209,115 @@ class User {
     }
 
     public function getUserData($userId) {
-        $stmt = Database::query("SELECT id, username, email, full_name, profile_pic, is_active, is_verified, role 
-                                 FROM users WHERE id = ?", [$userId]);
+        $stmt = Database::query("
+            SELECT u.id, u.username, u.email, u.full_name, u.profile_pic, u.is_active, u.is_verified, u.role,
+                   u.school_id, u.faculty_id, u.department_id, u.level,
+                   s.name AS school_name, f.name AS faculty_name, d.name AS department_name
+            FROM users u
+            LEFT JOIN schools s ON u.school_id = s.id
+            LEFT JOIN faculties f ON u.faculty_id = f.id
+            LEFT JOIN departments d ON u.department_id = d.id
+            WHERE u.id = ?", [$userId]);
         $user = $stmt->fetch();
         if (!$user) {
             throw new Exception('User not found');
         }
         return $user;
+    }
+
+    public function updateUser($userId, $data) {
+        $fields = [];
+        $params = [];
+        if (!empty($data['username'])) {
+            $fields[] = 'username = ?';
+            $params[] = $data['username'];
+        }
+        if (!empty($data['email'])) {
+            $fields[] = 'email = ?';
+            $params[] = $data['email'];
+        }
+        if (!empty($data['full_name'])) {
+            $fields[] = 'full_name = ?';
+            $params[] = $data['full_name'];
+        }
+        if (isset($data['school_id']) && $data['school_id'] !== '') {
+            $fields[] = 'school_id = ?';
+            $params[] = $data['school_id'];
+        }
+        if (isset($data['faculty_id']) && $data['faculty_id'] !== '') {
+            $fields[] = 'faculty_id = ?';
+            $params[] = $data['faculty_id'];
+        }
+        if (isset($data['department_id']) && $data['department_id'] !== '') {
+            $fields[] = 'department_id = ?';
+            $params[] = $data['department_id'];
+        }
+        if (isset($data['level']) && $data['level'] !== '') {
+            $fields[] = 'level = ?';
+            $params[] = $data['level'];
+        }
+        if (isset($data['is_active'])) {
+            $fields[] = 'is_active = ?';
+            $params[] = $data['is_active'];
+        }
+        if (isset($data['is_verified'])) {
+            $fields[] = 'is_verified = ?';
+            $params[] = $data['is_verified'];
+        }
+        if (!empty($data['role'])) {
+            $fields[] = 'role = ?';
+            $params[] = $data['role'];
+        }
+        if (empty($fields)) {
+            return false;
+        }
+        $params[] = $userId;
+        $stmt = $this->pdo->prepare("UPDATE users SET " . implode(', ', $fields) . " WHERE id = ?");
+        try {
+            // Validate uniqueness
+            if (!empty($data['username'])) {
+                $stmtCheck = $this->pdo->prepare("SELECT id FROM users WHERE username = ? AND id != ?");
+                $stmtCheck->execute([$data['username'], $userId]);
+                if ($stmtCheck->fetch()) {
+                    throw new Exception("Username already taken");
+                }
+            }
+            if (!empty($data['email'])) {
+                $stmtCheck = $this->pdo->prepare("SELECT id FROM users WHERE email = ? AND id != ?");
+                $stmtCheck->execute([$data['email'], $userId]);
+                if ($stmtCheck->fetch()) {
+                    throw new Exception("Email already in use");
+                }
+            }
+            // Validate school, faculty, department
+            if (!empty($data['school_id'])) {
+                $stmtCheck = $this->pdo->prepare("SELECT COUNT(*) FROM schools WHERE id = ?");
+                $stmtCheck->execute([$data['school_id']]);
+                if ($stmtCheck->fetchColumn() == 0) {
+                    throw new Exception('Invalid school selected');
+                }
+            }
+            if (!empty($data['faculty_id'])) {
+                $stmtCheck = $this->pdo->prepare("SELECT COUNT(*) FROM faculties WHERE id = ? AND school_id = ?");
+                $stmtCheck->execute([$data['faculty_id'], $data['school_id']]);
+                if ($stmtCheck->fetchColumn() == 0) {
+                    throw new Exception('Invalid faculty selected');
+                }
+            }
+            if (!empty($data['department_id'])) {
+                $stmtCheck = $this->pdo->prepare("SELECT COUNT(*) FROM departments WHERE id = ? AND faculty_id = ?");
+                $stmtCheck->execute([$data['department_id'], $data['faculty_id']]);
+                if ($stmtCheck->fetchColumn() == 0) {
+                    throw new Exception('Invalid department selected');
+                }
+            }
+            $stmt->execute($params);
+            error_log("User updated: user_id=$userId");
+            return true;
+        } catch (Exception $e) {
+            error_log("Update user error: " . $e->getMessage());
+            throw $e;
+        }
     }
 
     public function updateProfile($userId, $username, $email, $full_name, $profile_pic = null) {

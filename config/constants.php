@@ -1,5 +1,5 @@
 <?php
-define('SITE_URL', 'http://quizapp.test'); // Laragon URL
+define('SITE_URL', 'http://unistar.test'); // Laragon URL
 define('MIN_PASSWORD_LEN', 8);
 define('PASSWORD_PATTERN', '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/');
 define('MAX_PIC_SIZE', 2 * 1024 * 1024); // 2MB
@@ -14,9 +14,9 @@ define('PAYSTACK_PUBLIC_KEY', 'pk_test_your_public_key'); // Replace
 define('PAYSTACK_SECRET_KEY', 'sk_test_your_secret_key'); // Replace
 define('PAYSTACK_WEBHOOK_SECRET', 'whsec_your_webhook_secret'); // Replace
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'unistar_quiz');
-define('DB_USER', 'root');
-define('DB_PASS', '');
+define('DB_NAME', 'unistar');
+define('DB_USER', 'unistar');
+define('DB_PASS', 'unistar');
 define('DB_CHARSET', 'utf8mb4');
 define('DB_DSN', 'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=' . DB_CHARSET);
 define('DB_OPTIONS', [

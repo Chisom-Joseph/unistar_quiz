@@ -1,23 +1,27 @@
 <?php
-// views/layouts/main.php
+// views/home.php
 ob_start();
 require_once 'config/constants.php';
 require_once 'includes/auth.php';
 require_once 'classes/User.php';
 
-$user = new User();
-$isLoggedIn = isset($_SESSION['user_id']);
-$userData = null;
-if ($user->isLoggedIn()) {
+$userObj = new User();
+$user = null;
+$userFullName = 'Guest';
+if ($userObj->isLoggedIn() && isset($_SESSION['user_id'])) {
     try {
-        $userData = $user->getUserData($_SESSION['user_id']);
+        $user = $userObj->getUserData($_SESSION['user_id']);
+        if ($user !== null && isset($user['full_name'])) {
+            $userFullName = htmlspecialchars($user['full_name']);
+        } else {
+            error_log("User data is null or missing full_name for user_id: " . $_SESSION['user_id']);
+        }
     } catch (Exception $e) {
-        error_log("Error fetching user data on home page: " . $e->getMessage());
+        error_log("Error fetching user data for user_id: " . ($_SESSION['user_id'] ?? 'unset') . " - " . $e->getMessage());
     }
+} else {
+    error_log("No user logged in or user_id not set in session");
 }
-$isAdmin = $isLoggedIn && $userData['role'] === 'admin';
-$currentPage = isset($_GET['page']) ? $_GET['page'] : ''; 
-
 ?>
 <?php require_once 'views/partials/header.php'; ?>
 <main>
@@ -32,7 +36,7 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                     </div>
                     <div class="modal-body">
                         <div class="alert alert-success mb-0" role="alert">
-                            Admin account created: <strong>admin@quizapp.test</strong> / <strong>admin123</strong>
+                            Admin account created: <strong>admin@unistar.test</strong> / <strong>admin123</strong>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -575,9 +579,10 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
             <div class="row align-items-center">
                <div class="col-xl-7 col-lg-7 col-md-9 col-sm-9">
                   <div class="it-video-content">
-                     <span>Join Our New Session</span>
-                     <h3 class="it-video-title">Call To Enroll Your Child <br> <a
-                           href="tel:+91958423452">(+91)958423452</a></h3>
+                     <span>More Info</span>
+                     <h3 class="it-video-title">Call <a href="tel:+2348149075542">(+234)8149075542</a></h3>
+                     <h3 class="it-video-title">Call <a href="tel:+2347061682860">(+234)7061682860</a></h3>
+                     <h3 class="it-video-title">WhatsApp <a href="tel:+2349024860869">(+234)9024860869</a></h3>
                      <div class="it-video-button">
                         <a class="it-btn-theme-2" href="#">
                            <span>
@@ -634,7 +639,7 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                <div class="col-xl-6 col-lg-6 mb-30">
                   <div class="it-career-item p-relative fix">
                      <div class="it-career-content">
-                        <span>Medical Exam</span>
+                        <span>University quiz</span>
                         <p>Lorem ipsum dolor sit amet, consectetur
                            adipiscing elit sed.</p>
                         <a class="it-btn-yellow mr-15" href="#">
@@ -661,7 +666,61 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : '';
                <div class="col-xl-6 col-lg-6 mb-30">
                   <div class="it-career-item p-relative fix">
                      <div class="it-career-content">
-                        <span>BCS Exam</span>
+                        <span>JAMB quiz</span>
+                        <p>Lorem ipsum dolor sit amet, consectetur
+                           adipiscing elit sed.</p>
+                        <a class="it-btn-yellow mr-15" href="#">
+                           <span>
+                              Join now
+                              <svg width="17" height="14" viewBox="0 0 17 14" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                 <path d="M11 1.24023L16 7.24023L11 13.2402" stroke="currentcolor" stroke-width="1.5"
+                                    stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                 <path d="M1 7.24023H16" stroke="currentcolor" stroke-width="1.5"
+                                    stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                              </svg>
+                           </span>
+                        </a>
+                     </div>
+                     <div class="it-career-thumb">
+                        <img src="/public/img/career/thumb-2.png" alt="">
+                     </div>
+                     <div class="it-career-shape-1">
+                        <img src="/public/img/career/shape-1.png" alt="">
+                     </div>
+                  </div>
+               </div>
+               <div class="col-xl-6 col-lg-6 mb-30">
+                  <div class="it-career-item p-relative fix">
+                     <div class="it-career-content">
+                        <span>Awards</span>
+                        <p>Lorem ipsum dolor sit amet, consectetur
+                           adipiscing elit sed.</p>
+                        <a class="it-btn-yellow mr-15" href="#">
+                           <span>
+                              Join now
+                              <svg width="17" height="14" viewBox="0 0 17 14" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                 <path d="M11 1.24023L16 7.24023L11 13.2402" stroke="currentcolor" stroke-width="1.5"
+                                    stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                 <path d="M1 7.24023H16" stroke="currentcolor" stroke-width="1.5"
+                                    stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                              </svg>
+                           </span>
+                        </a>
+                     </div>
+                     <div class="it-career-thumb">
+                        <img src="/public/img/career/thumb-2.png" alt="">
+                     </div>
+                     <div class="it-career-shape-1">
+                        <img src="/public/img/career/shape-1.png" alt="">
+                     </div>
+                  </div>
+               </div>
+               <div class="col-xl-6 col-lg-6 mb-30">
+                  <div class="it-career-item p-relative fix">
+                     <div class="it-career-content">
+                        <span>Unistar Ambasadors</span>
                         <p>Lorem ipsum dolor sit amet, consectetur
                            adipiscing elit sed.</p>
                         <a class="it-btn-yellow mr-15" href="#">
