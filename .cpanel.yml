@@ -1,4 +1,4 @@
 deployment:
   tasks:
     - export DEPLOY_PATH=/home/fluxcryp/unistar.com.ng
-    - /bin/rsync -a --exclude=config/constants.php . $DEPLOY_PATH
+    - /bin/rsync -a --delete --exclude=config/constants.php . $DEPLOY_PATH
