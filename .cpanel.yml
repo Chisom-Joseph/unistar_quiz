@@ -1,9 +1,4 @@
----
 deployment:
   tasks:
     - export DEPLOY_PATH=/home/fluxcryp/unistar.com.ng
-    - echo "🚀 Cleaning up removed files..."
-    - /usr/bin/find $DEPLOY_PATH -type f -not -path "$DEPLOY_PATH/config/constants.php" -delete
-    - echo "📦 Copying new files..."
-    - /bin/cp -r * $DEPLOY_PATH
-    - echo "✅ Deployment completed!"
+    - /bin/rsync -av --delete --exclude='config/constants.php' --exclude='.git*' --exclude='.cpanel.yml' . $DEPLOY_PATH/
