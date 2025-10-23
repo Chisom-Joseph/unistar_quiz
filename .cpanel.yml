@@ -1,4 +1,13 @@
+---
 deployment:
   tasks:
     - export DEPLOY_PATH=/home/fluxcryp/unistar.com.ng
-    - /bin/cp -r * $DEPLOY_PATH
+    - echo "🚀 Starting deployment to $DEPLOY_PATH..."
+
+    # Sync all files except config/constants.php
+    - /bin/rsync -av --delete \
+      --exclude='.git' \
+      --exclude='config/constants.php' \
+      ./ $DEPLOY_PATH/
+
+    - echo "✅ Files deployed successfully!"
