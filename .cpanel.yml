@@ -1,4 +1,11 @@
+---
 deployment:
   tasks:
-    - export DEPLOY_PATH=/home/fluxcryp/unistar.com.ng
-    - /bin/rsync -a --delete --exclude=config/constants.php . $DEPLOY_PATH
+    - export DEPLOYPATH=/home/fluxcryp/unistar.com.ng
+    - echo "🚀 Starting deployment to $DEPLOYPATH..."
+    - /bin/rsync -av --delete --exclude='.git' --exclude='.cpanel.yml' --exclude='config/constants.php' ./ $DEPLOYPATH/
+    - echo "✅ Files synced successfully!"
+    - /bin/chown -R fluxcryp:fluxcryp $DEPLOYPATH
+    - /bin/find $DEPLOYPATH -type f -exec chmod 644 {} \;
+    - /bin/find $DEPLOYPATH -type d -exec chmod 755 {} \;
+    - echo "🎉 Deployment complete!"
